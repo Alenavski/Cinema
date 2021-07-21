@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema", "Cinema\Cinema.csproj", "{49595521-1F30-4D21-8B05-5A583FD6B65A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaDB", "CinemaDB\CinemaDB.csproj", "{00AC094D-5054-4254-8349-7AF83D705AB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaServices", "CinemaServices\CinemaServices.csproj", "{F92FF352-D34C-47A9-8F76-C9472759C607}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{49595521-1F30-4D21-8B05-5A583FD6B65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49595521-1F30-4D21-8B05-5A583FD6B65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49595521-1F30-4D21-8B05-5A583FD6B65A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AC094D-5054-4254-8349-7AF83D705AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AC094D-5054-4254-8349-7AF83D705AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AC094D-5054-4254-8349-7AF83D705AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AC094D-5054-4254-8349-7AF83D705AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92FF352-D34C-47A9-8F76-C9472759C607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92FF352-D34C-47A9-8F76-C9472759C607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92FF352-D34C-47A9-8F76-C9472759C607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92FF352-D34C-47A9-8F76-C9472759C607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

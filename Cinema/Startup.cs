@@ -1,3 +1,5 @@
+using Cinema.Tools;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Cinema
 {
@@ -22,8 +25,22 @@ namespace Cinema
         {
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "D:/practice/cinema-angular/Cinema/dist"; });
             services.AddControllers();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidateAudience = true,
+                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +76,7 @@ namespace Cinema
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "D:/practice/cinema-angular/Cinema";
 
                 if (env.IsDevelopment())
                 {
