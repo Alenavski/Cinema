@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>CinemaServices</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.0-preview.6.21355.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Cinema.DB\Cinema.DB.csproj" />
+    </ItemGroup>
+
+</Project>
