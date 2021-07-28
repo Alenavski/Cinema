@@ -1,6 +1,6 @@
-﻿namespace CinemaServices.DTOs
+﻿namespace Cinema.Services.Dtos
 {
-    public class UserDTO
+    public class UserDto
     {
         public int Id { get; set; }
         public string Email { get; set; }

@@ -1,22 +1,35 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using CinemaDB.EF;
-using CinemaDB.Entities;
-using CinemaServices.Constants;
-using CinemaServices.DTOs;
-using CinemaServices.Interfaces;
+using Cinema.DB.EF;
+using Cinema.DB.Entities;
+using Cinema.Services.Constants;
+using Cinema.Services.Dtos;
+using Cinema.Services.Exceptions;
+using Cinema.Services.Interfaces;
+using Cinema.Services.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
-namespace CinemaServices
+namespace Cinema.Services
 {
     public class UserService: IUserService
     {
-        public UserDTO CreateUser(AuthDTO authDto)
+        private ApplicationContext _context;
+        private HashingOptions _hashingOptions;
+        
+        public UserService(ApplicationContext context, IOptions<HashingOptions> hashingOptions)
         {
-            using var context = new ApplicationContext();
+            _context = context;
+            _hashingOptions = hashingOptions.Value;
+        }
 
+        public async Task<UserDto> CreateUser(AuthDto authDto)
+        {
             const int numberOfBytes = 16;
             var salt = CreateSalt(numberOfBytes);
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
@@ -25,42 +38,39 @@ namespace CinemaServices
                 Email = authDto.Email,
                 Password = hashedPassword,
                 Salt = Encoding.Unicode.GetString(salt),
-                Role = "user"
+                Role = Roles.User.ToString()
             };
-            context.Users.Add(user);
-            context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
-            var userDto = new UserDTO
+            return new UserDto
             {
-                Id = context.Users.FirstOrDefault(u => u.Email == authDto.Email).Id,
+                Id = user.Id,
                 Email = authDto.Email,
                 Role = Roles.User.ToString().ToLower()
             };
-            return userDto;
         }
 
-        public UserDTO CheckAuthData(AuthDTO authDto)
+        public async Task<UserDto> CheckAuthData(AuthDto authDto)
         {
-            using var context = new ApplicationContext();
-            var user = context.Users.FirstOrDefault(u => u.Email == authDto.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == authDto.Email);
             if (user == null)
             {
-                throw new Exception("User with this email wasn't found:(");
+                throw new AuthenticationDataInvalidException("User with this email wasn't found:(");
             }
 
             var salt = Encoding.Unicode.GetBytes(user.Salt);
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
             if (user.Password != hashedPassword)
             {
-                throw new Exception("Password is incorrect:(");
+                throw new AuthenticationDataInvalidException("Password is incorrect:(");
             }
-            var userDto = new UserDTO
+            return new UserDto
             {
                 Id = user.Id,
                 Email = authDto.Email,
                 Role = user.Role
             };
-            return userDto;
         }
 
         private static byte[] CreateSalt(int size)
@@ -71,15 +81,15 @@ namespace CinemaServices
             return salt;
         }
 
-        private static string CreateHashedPassword(string password, byte[] salt)
+        private string CreateHashedPassword(string password, byte[] salt)
         {
             return Encoding.Unicode.GetString(
                 KeyDerivation.Pbkdf2(
-                    password: password,
-                    salt: salt,
-                    prf: KeyDerivationPrf.HMACSHA1,
-                    iterationCount: 10000,
-                    numBytesRequested: 64
+                    password,
+                    salt,
+                    KeyDerivationPrf.HMACSHA1,
+                    _hashingOptions.IterationCount,
+                    _hashingOptions.NumBytesRequested
                 )
             );
         }

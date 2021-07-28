@@ -1,10 +1,11 @@
-﻿using CinemaServices.DTOs;
+﻿using System.Threading.Tasks;
+using Cinema.Services.Dtos;
 
-namespace CinemaServices.Interfaces
+namespace Cinema.Services.Interfaces
 {
     public interface IUserService
     {
-        UserDTO CreateUser(AuthDTO authDto);
-        UserDTO CheckAuthData(AuthDTO authDto);
+        Task<UserDto> CreateUser(AuthDto authDto);
+        Task<UserDto> CheckAuthData(AuthDto authDto);
     }
 }

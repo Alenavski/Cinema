@@ -1,4 +1,4 @@
-﻿namespace CinemaServices.Constants
+﻿namespace Cinema.Services.Constants
 {
     public enum Roles
     {

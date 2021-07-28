@@ -2,13 +2,22 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Cinema.API.Tools.Interfaces;
+using Cinema.Services.Dtos;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CinemaAPI.Tools
+namespace Cinema.API.Tools
 {
-    public static class AuthTool
+    public class AuthTool: IAuthTool
     {
-        public static string CreateToken(string email, int id, string role)
+        private readonly AuthOptions _authOptions;
+        public AuthTool(IOptions<AuthOptions> authOptions)
+        {
+            _authOptions = authOptions.Value;
+        }
+
+        public string CreateToken(string email, int id, string role)
         {
             var claims = new List<Claim>
             {
@@ -20,13 +29,13 @@ namespace CinemaAPI.Tools
             var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimTypes.Email, ClaimTypes.Role);
             var dateNow = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.Issuer,
-                audience: AuthOptions.Audience,
+                issuer: _authOptions.Issuer,
+                audience: _authOptions.Audience,
                 notBefore: dateNow,
                 claims: claimsIdentity.Claims,
-                expires: dateNow.Add(TimeSpan.FromHours(AuthOptions.HoursOfTokenLifetime)),
+                expires: dateNow.Add(TimeSpan.FromHours(_authOptions.HoursOfTokenLifetime)),
                 signingCredentials: new SigningCredentials(
-                    AuthOptions.GetSymmetricSecurityKey(),
+                    _authOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256
                 )
             );

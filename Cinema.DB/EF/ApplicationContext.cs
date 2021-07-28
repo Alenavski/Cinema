@@ -1,31 +1,25 @@
 ﻿using System.IO;
-using CinemaDB.Entities;
+using Cinema.DB.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
-namespace CinemaDB.EF
+namespace Cinema.DB.EF
 {
     public class ApplicationContext: DbContext
     {
         public DbSet<UserEntity> Users { get; set; }
 
-        public ApplicationContext(): base()
-        {
-            
-        }
+        private DatabaseOptions _databaseOptions;
 
-        private static string GetConnectionString()
+        public ApplicationContext(IOptions<DatabaseOptions> options)
         {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            return config.GetConnectionString("DefaultConnection");
+            _databaseOptions = options.Value;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(GetConnectionString());
+            optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

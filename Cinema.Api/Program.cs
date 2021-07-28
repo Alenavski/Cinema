@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace CinemaAPI
+namespace Cinema.API
 {
     public class Program
     {

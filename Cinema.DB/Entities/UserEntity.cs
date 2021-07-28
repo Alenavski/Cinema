@@ -1,4 +1,4 @@
-﻿namespace CinemaDB.Entities
+﻿namespace Cinema.DB.Entities
 {
     public class UserEntity
     {
