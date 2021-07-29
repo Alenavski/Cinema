@@ -7,6 +7,7 @@ using Cinema.Services.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +24,6 @@ namespace Cinema.API
         }
 
         public IConfiguration Configuration { get; }
-        public AuthOptions AuthOptions { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,19 +32,16 @@ namespace Cinema.API
                     AuthOptions.Position
                 )
             );
-            services.Configure<DatabaseOptions>(
-                Configuration.GetSection(
-                    DatabaseOptions.Position
-                )
-            );
             services.Configure<HashingOptions>(
                 Configuration.GetSection(
                     HashingOptions.Position
                 )
             );
-            AuthOptions = new AuthOptions();
-            Configuration.GetSection(AuthOptions.Position).Bind(AuthOptions);
+            var authOptions = new AuthOptions();
+            Configuration.GetSection(AuthOptions.Position).Bind(authOptions);
             services.AddControllers();
+            services.AddDbContext<ApplicationContext>(
+                options => options.UseSqlServer("name=DatabaseOptions:ConnectionString"));
             services.AddCors(
                 c =>
                 {
@@ -60,7 +57,6 @@ namespace Cinema.API
             );
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthTool, AuthTool>();
-            services.AddScoped<ApplicationContext, ApplicationContext>();
             services.AddSwaggerGen(
                 c =>
                 {
@@ -82,11 +78,11 @@ namespace Cinema.API
                         options.TokenValidationParameters = new TokenValidationParameters 
                         {
                             ValidateIssuer = true,
-                            ValidIssuer = AuthOptions.Issuer,
+                            ValidIssuer = authOptions.Issuer,
                             ValidateAudience = true,
-                            ValidAudience = AuthOptions.Audience,
+                            ValidAudience = authOptions.Audience,
                             ValidateLifetime = true,
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                             ValidateIssuerSigningKey = true
                         }; 
                     }

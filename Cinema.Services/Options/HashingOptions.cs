@@ -5,6 +5,6 @@
         public const string Position = "HashingOptions"; 
         
         public int IterationCount { get; set; }
-        public int NumBytesRequested { get; set; }
+        public int NumberBytesRequested { get; set; }
     }
 }

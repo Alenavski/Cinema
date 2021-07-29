@@ -1,15 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
 using Cinema.Services.Constants;
 using Cinema.Services.Dtos;
-using Cinema.Services.Exceptions;
 using Cinema.Services.Interfaces;
 using Cinema.Services.Options;
 using Microsoft.EntityFrameworkCore;
@@ -37,39 +33,37 @@ namespace Cinema.Services
             {
                 Email = authDto.Email,
                 Password = hashedPassword,
-                Salt = Encoding.Unicode.GetString(salt),
+                Salt = salt,
                 Role = Roles.User.ToString()
             };
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-
             return new UserDto
             {
                 Id = user.Id,
                 Email = authDto.Email,
-                Role = Roles.User.ToString().ToLower()
+                Role = Roles.User
             };
         }
 
-        public async Task<UserDto> CheckAuthData(AuthDto authDto)
+        public async Task<UserEntity> FindUserByEmail(AuthDto authDto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == authDto.Email);
-            if (user == null)
-            {
-                throw new AuthenticationDataInvalidException("User with this email wasn't found:(");
-            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == authDto.Email);
+        } 
 
-            var salt = Encoding.Unicode.GetBytes(user.Salt);
+        public UserDto CheckPassword(UserEntity user, AuthDto authDto)
+        {
+            var salt = user.Salt;
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
-            if (user.Password != hashedPassword)
+            if (user.Password.Equals(hashedPassword))
             {
-                throw new AuthenticationDataInvalidException("Password is incorrect:(");
+                return null;
             }
             return new UserDto
             {
                 Id = user.Id,
                 Email = authDto.Email,
-                Role = user.Role
+                Role = Enum.Parse<Roles>(user.Role)
             };
         }
 
@@ -81,16 +75,14 @@ namespace Cinema.Services
             return salt;
         }
 
-        private string CreateHashedPassword(string password, byte[] salt)
+        private byte[] CreateHashedPassword(string password, byte[] salt)
         {
-            return Encoding.Unicode.GetString(
-                KeyDerivation.Pbkdf2(
-                    password,
-                    salt,
-                    KeyDerivationPrf.HMACSHA1,
-                    _hashingOptions.IterationCount,
-                    _hashingOptions.NumBytesRequested
-                )
+            return KeyDerivation.Pbkdf2(
+                password,
+                salt,
+                KeyDerivationPrf.HMACSHA1,
+                _hashingOptions.IterationCount,
+                _hashingOptions.NumberBytesRequested
             );
         }
     }

@@ -10,16 +10,9 @@ namespace Cinema.DB.EF
     {
         public DbSet<UserEntity> Users { get; set; }
 
-        private DatabaseOptions _databaseOptions;
-
-        public ApplicationContext(IOptions<DatabaseOptions> options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            _databaseOptions = options.Value;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
