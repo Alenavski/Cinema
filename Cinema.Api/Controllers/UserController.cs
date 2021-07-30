@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Cinema.API.Tools.Interfaces;
+using Cinema.Api.Tools.Interfaces;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cinema.API.Controllers
+namespace Cinema.Api.Controllers
 {
     [ApiController]
     [Route("user")]
@@ -20,7 +20,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(AuthDto authDto)
+        public async Task<IActionResult> Register([FromBody]AuthDto authDto)
         {
             var userEntity = await _userService.FindUserByEmail(authDto);
             if (userEntity != null)
@@ -30,17 +30,19 @@ namespace Cinema.API.Controllers
                     message = "User with this email already exists:("
                 });
             }
+
             var userDto = await _userService.CreateUser(authDto);
+
             return Ok(
                 new
                 {
-                    token = _authTool.CreateToken(authDto.Email, userDto.Id, userDto.Role.ToString())
+                    token = _authTool.CreateToken(userDto)
                 }
-            );    
+            );
         }
-        
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login(AuthDto authDto)
+        public async Task<IActionResult> Login([FromBody]AuthDto authDto)
         {
             var userEntity = await _userService.FindUserByEmail(authDto);
             if (userEntity == null)
@@ -50,6 +52,7 @@ namespace Cinema.API.Controllers
                     message = "User with this email wasn't found:("
                 });
             }
+
             var userDto = _userService.CheckPassword(userEntity, authDto);
             if (userDto == null)
             {
@@ -58,9 +61,10 @@ namespace Cinema.API.Controllers
                     message = "Password is incorrect:("
                 });
             }
+
             return Ok(new
             {
-                token = _authTool.CreateToken(authDto.Email, userDto.Id, userDto.Role.ToString())
+                token = _authTool.CreateToken(userDto)
             });
         }
     }

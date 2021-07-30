@@ -17,7 +17,7 @@ namespace Cinema.Services
     {
         private ApplicationContext _context;
         private HashingOptions _hashingOptions;
-        
+
         public UserService(ApplicationContext context, IOptions<HashingOptions> hashingOptions)
         {
             _context = context;
@@ -26,9 +26,9 @@ namespace Cinema.Services
 
         public async Task<UserDto> CreateUser(AuthDto authDto)
         {
-            const int numberOfBytes = 16;
-            var salt = CreateSalt(numberOfBytes);
+            var salt = CreateSalt(_hashingOptions.NumberBytesOfSalt);
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
+
             var user = new UserEntity
             {
                 Email = authDto.Email,
@@ -38,11 +38,12 @@ namespace Cinema.Services
             };
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+
             return new UserDto
             {
                 Id = user.Id,
-                Email = authDto.Email,
-                Role = Roles.User
+                Email = user.Email,
+                Role = Enum.Parse<Roles>(user.Role)
             };
         }
 
@@ -55,14 +56,16 @@ namespace Cinema.Services
         {
             var salt = user.Salt;
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
+
             if (user.Password.Equals(hashedPassword))
             {
                 return null;
             }
+
             return new UserDto
             {
                 Id = user.Id,
-                Email = authDto.Email,
+                Email = user.Email,
                 Role = Enum.Parse<Roles>(user.Role)
             };
         }
@@ -82,7 +85,7 @@ namespace Cinema.Services
                 salt,
                 KeyDerivationPrf.HMACSHA1,
                 _hashingOptions.IterationCount,
-                _hashingOptions.NumberBytesRequested
+                _hashingOptions.NumberBytesRequestedForHash
             );
         }
     }

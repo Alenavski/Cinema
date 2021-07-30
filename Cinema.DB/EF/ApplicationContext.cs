@@ -1,8 +1,5 @@
-﻿using System.IO;
-using Cinema.DB.Entities;
+﻿using Cinema.DB.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace Cinema.DB.EF
 {
@@ -12,7 +9,7 @@ namespace Cinema.DB.EF
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

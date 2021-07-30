@@ -1,5 +1,5 @@
-using Cinema.API.Tools;
-using Cinema.API.Tools.Interfaces;
+using Cinema.Api.Tools;
+using Cinema.Api.Tools.Interfaces;
 using Cinema.DB.EF;
 using Cinema.Services;
 using Cinema.Services.Interfaces;
@@ -14,16 +14,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace Cinema.API
+namespace Cinema.Api
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -97,12 +97,12 @@ namespace Cinema.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cinema.Api v1"));
             }
-            
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseCors("AllowOrigin");
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Cinema.API.Tools.Interfaces;
+using Cinema.Api.Tools.Interfaces;
 using Cinema.Services.Dtos;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Cinema.API.Tools
+namespace Cinema.Api.Tools
 {
     public class AuthTool: IAuthTool
     {
@@ -17,20 +17,21 @@ namespace Cinema.API.Tools
             _authOptions = authOptions.Value;
         }
 
-        public string CreateToken(string email, int id, string role)
+        public string CreateToken(UserDto userDto)
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Email, email),
-                new(ClaimTypes.Sid, id.ToString()),
-                new(ClaimsIdentity.DefaultRoleClaimType, role)
+                new(ClaimTypes.Email, userDto.Email),
+                new(ClaimTypes.Sid, userDto.Id.ToString()),
+                new(ClaimsIdentity.DefaultRoleClaimType, userDto.Role.ToString())
             };
-
             var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimTypes.Email, ClaimTypes.Role);
+
             var dateNow = DateTime.UtcNow;
+
             var jwt = new JwtSecurityToken(
-                issuer: _authOptions.Issuer,
-                audience: _authOptions.Audience,
+                _authOptions.Issuer,
+                _authOptions.Audience,
                 notBefore: dateNow,
                 claims: claimsIdentity.Claims,
                 expires: dateNow.Add(TimeSpan.FromHours(_authOptions.HoursOfTokenLifetime)),
@@ -39,7 +40,7 @@ namespace Cinema.API.Tools
                     SecurityAlgorithms.HmacSha256
                 )
             );
-            
+
             return new JwtSecurityTokenHandler().WriteToken(jwt); 
         }
     }

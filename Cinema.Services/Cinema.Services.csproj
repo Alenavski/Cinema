@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>CinemaServices</RootNamespace>
+        <RootNamespace>Cinema.Services</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

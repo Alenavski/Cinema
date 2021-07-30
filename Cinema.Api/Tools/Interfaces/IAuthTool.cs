@@ -1,7 +1,9 @@
-﻿namespace Cinema.API.Tools.Interfaces
+﻿using Cinema.Services.Dtos;
+
+namespace Cinema.Api.Tools.Interfaces
 {
     public interface IAuthTool
     {
-        string CreateToken(string email, int id, string role);
+        string CreateToken(UserDto userDto);
     }
 }
