@@ -1,10 +1,12 @@
 ﻿CREATE TABLE [dbo].[Showtimes] (
-    [Id]       BIGINT   NOT NULL,
-    [Time]     TIME (7) NOT NULL,
-    [Movie_Id] BIGINT   NOT NULL,
-    [Hall_Id]  BIGINT   NOT NULL,
+    [Id]      BIGINT   IDENTITY (1, 1) NOT NULL,
+    [Time]    TIME (7) NOT NULL,
+    [MovieId] INT      NOT NULL,
+    [HallId]  INT      NOT NULL,
     CONSTRAINT [PK_Showtimes] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Showtimes_Halls] FOREIGN KEY ([Hall_Id]) REFERENCES [dbo].[Halls] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Showtimes_Movies] FOREIGN KEY ([Movie_Id]) REFERENCES [dbo].[Movies] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_Showtimes_Halls] FOREIGN KEY ([HallId]) REFERENCES [dbo].[Halls] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Showtimes_Movies] FOREIGN KEY ([MovieId]) REFERENCES [dbo].[Movies] ([Id]) ON DELETE CASCADE
 );
+
+
 
