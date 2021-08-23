@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Cinema.Api.Tools
 {
-    public class AuthTool: IAuthTool
+    public class AuthTool : IAuthTool
     {
         private readonly AuthOptions _authOptions;
         public AuthTool(IOptions<AuthOptions> authOptions)

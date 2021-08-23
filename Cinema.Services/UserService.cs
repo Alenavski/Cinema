@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace Cinema.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private ApplicationContext _context;
         private HashingOptions _hashingOptions;
