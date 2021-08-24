@@ -21,6 +21,7 @@ namespace Cinema.Services.Dtos
 
         [Required]
         public DateTime EndDate { get; set; }
+
         public byte[] Poster { get; set; }
 
         public MovieDto(int id, string title, string description, DateTime startDate, DateTime endDate, byte[] poster)

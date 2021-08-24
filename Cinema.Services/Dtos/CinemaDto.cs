@@ -19,6 +19,7 @@ namespace Cinema.Services.Dtos
         [MaxLength(100)]
         [MinLength(3)]
         public string Address { get; set; }
+
         public byte[] Image { get; set; }
 
         public CinemaDto(int id, string name, string city, string address, byte[] image)

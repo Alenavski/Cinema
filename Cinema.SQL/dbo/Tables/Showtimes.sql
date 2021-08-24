@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Showtimes] (
     [Id]      BIGINT   IDENTITY (1, 1) NOT NULL,
-    [Time]    DATETIME2 (7) NOT NULL,
+    [Time]    TIME (7) NOT NULL,
     [NumberOfFreeSeats] SMALLINT NULL,
     [MovieId] INT      NOT NULL,
     [HallId]  INT      NOT NULL,

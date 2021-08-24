@@ -19,8 +19,9 @@ namespace Cinema.Services.Dtos
         public DateTime Date { get; set; }
 
         [Required]
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+
+        public TimeSpan? EndTime { get; set; }
 
         [Required]
         public int NumberOfFreeSeats { get; set; }

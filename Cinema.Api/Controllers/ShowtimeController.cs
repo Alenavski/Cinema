@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cinema.Api.Controllers
 {
     [ApiController]
-    [Route("showtime")]
+    [Route("showtimes")]
     public class ShowtimeController : ControllerBase
     {
         private readonly IShowtimeService _showtimeService;
@@ -16,22 +16,11 @@ namespace Cinema.Api.Controllers
             _showtimeService = showtimeService;
         }
 
-        [HttpGet("filter")]
+        [HttpGet]
         public IActionResult GetShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
         {
-            return Ok(new
-            {
-                showtimes = _showtimeService.GetShowtimesByFilter(showtimeFilterDto)
-            });
-        }
-
-        [HttpGet("date")]
-        public IActionResult GetDate()
-        {
-            return Ok(new
-            {
-                date = DateTime.Now
-            });
+            var showtimes = _showtimeService.GetShowtimesByFilter(showtimeFilterDto);
+            return Ok(showtimes);
         }
     }
 }

@@ -8,7 +8,8 @@ namespace Cinema.Services.Dtos
         public long Id { get; set; }
 
         [Required]
-        public DateTime Time { get; set; }
+        public TimeSpan Time { get; set; }
+
         public short NumberOfFreeSeats { get; set; }
 
         [Required]
@@ -17,7 +18,7 @@ namespace Cinema.Services.Dtos
         [Required]
         public HallDto Hall { get; set; }
 
-        public ShowtimeDto(long id, DateTime time, short numberOfFreeSeats, MovieDto movie, HallDto hall)
+        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, MovieDto movie, HallDto hall)
         {
             Id = id;
             Time = time;
