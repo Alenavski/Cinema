@@ -57,6 +57,7 @@ namespace Cinema.Api
             );
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthTool, AuthTool>();
+            services.AddScoped<IShowtimeService, ShowtimeService>();
             services.AddSwaggerGen(
                 c =>
                 {
