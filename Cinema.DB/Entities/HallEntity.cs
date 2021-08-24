@@ -7,6 +7,6 @@ namespace Cinema.DB.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public CinemaEntity Cinema { get; set; }
-        public List<ShowtimeEntity> Showtimes { get; set; }
+        public ICollection<ShowtimeEntity> Showtimes { get; set; }
     }
 }

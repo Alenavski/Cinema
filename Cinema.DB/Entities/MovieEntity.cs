@@ -11,6 +11,6 @@ namespace Cinema.DB.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public byte[] Poster { get; set; }
-        public List<ShowtimeEntity> Showtimes { get; set; }
+        public ICollection<ShowtimeEntity> Showtimes { get; set; }
     }
 }
