@@ -13,17 +13,13 @@ namespace Cinema.Services.Dtos
         public short NumberOfFreeSeats { get; set; }
 
         [Required]
-        public MovieDto Movie { get; set; }
-
-        [Required]
         public HallDto Hall { get; set; }
 
-        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, MovieDto movie, HallDto hall)
+        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall)
         {
             Id = id;
             Time = time;
             NumberOfFreeSeats = numberOfFreeSeats;
-            Movie = movie;
             Hall = hall;
         }
     }

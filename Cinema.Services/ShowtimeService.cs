@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cinema.DB.EF;
+using Cinema.DB.Entities;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Mapster;
@@ -18,7 +19,7 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public IEnumerable<ShowtimeDto> GetShowtimesByFilter(ShowtimeFilterDto filter)
+        public IEnumerable<MovieDto> GetMoviesByFilter(ShowtimeFilterDto filter)
         {
             filter.EndTime ??= new TimeSpan(23, 59, 59);
             var showtimes = _context.Showtimes
@@ -44,7 +45,16 @@ namespace Cinema.Services
                     .Where(s => s.Hall.Cinema.Name == filter.CinemaName);
             }
 
-            return showtimes.Adapt<ShowtimeDto[]>();
+            var movies = showtimes.AsEnumerable().GroupBy(s => s.Movie);
+            var movieEntities = new List<MovieEntity>();
+            foreach (var movie in movies)
+            {
+                movie.Key.Showtimes.Clear();
+                movie.Key.Showtimes = movie.ToList();
+                movieEntities.Add(movie.Key);
+            }
+
+            return movieEntities.Adapt<MovieDto[]>();
         }
     }
 }

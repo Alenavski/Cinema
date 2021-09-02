@@ -6,6 +6,6 @@ namespace Cinema.Services.Interfaces
 {
     public interface IShowtimeService
     {
-        public IEnumerable<ShowtimeDto> GetShowtimesByFilter(ShowtimeFilterDto filter);
+        public IEnumerable<MovieDto> GetMoviesByFilter(ShowtimeFilterDto filter);
     }
 }

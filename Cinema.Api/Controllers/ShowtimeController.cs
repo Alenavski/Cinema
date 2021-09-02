@@ -19,8 +19,8 @@ namespace Cinema.Api.Controllers
         [HttpGet]
         public IActionResult GetShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
         {
-            var showtimes = _showtimeService.GetShowtimesByFilter(showtimeFilterDto);
-            return Ok(showtimes);
+            var movies = _showtimeService.GetMoviesByFilter(showtimeFilterDto);
+            return Ok(movies);
         }
     }
 }
