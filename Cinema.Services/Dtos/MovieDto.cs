@@ -23,8 +23,10 @@ namespace Cinema.Services.Dtos
         public DateTime EndDate { get; set; }
 
         public byte[] Poster { get; set; }
+        
+        public ICollection<ShowtimeDto> Showtimes { get; set; }
 
-        public MovieDto(int id, string title, string description, DateTime startDate, DateTime endDate, byte[] poster)
+        public MovieDto(int id, string title, string description, DateTime startDate, DateTime endDate, byte[] poster, ICollection<ShowtimeDto> showtimes)
         {
             Id = id;
             Title = title;
@@ -32,6 +34,7 @@ namespace Cinema.Services.Dtos
             StartDate = startDate;
             EndDate = endDate;
             Poster = poster;
+            Showtimes = showtimes;
         }
     }
 }
