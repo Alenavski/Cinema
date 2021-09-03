@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Services
 {
-    public class ShowtimeService : IShowtimeService
+    public class MovieService : IMovieService
     {
         private ApplicationContext _context;
 
-        public ShowtimeService(ApplicationContext context)
+        public MovieService(ApplicationContext context)
         {
             _context = context;
         }
