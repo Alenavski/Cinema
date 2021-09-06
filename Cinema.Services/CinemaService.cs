@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Services
 {
@@ -28,6 +28,19 @@ namespace Cinema.Services
         {
             var cinema = await _context.Cinemas.FindAsync(id);
             return cinema.Adapt<CinemaDto>();
+        }
+
+        public async Task<int> UpdateCinema(CinemaDto cinemaDto)
+        {
+            var cinema = cinemaDto.Adapt<CinemaEntity>();
+            _context.Cinemas.Update(cinema);
+            await _context.SaveChangesAsync();
+            return cinema.Id;
+        }
+
+        public IEnumerable<CinemaDto> GetCinemas()
+        {
+            return _context.Cinemas.Adapt<CinemaDto[]>();
         }
     }
 }
