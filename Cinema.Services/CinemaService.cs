@@ -5,6 +5,7 @@ using Cinema.DB.Entities;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Services
 {
@@ -26,15 +27,24 @@ namespace Cinema.Services
 
         public async Task<CinemaDto> GetCinemaById(int id)
         {
-            var cinema = await _context.Cinemas.FindAsync(id);
-            return cinema.Adapt<CinemaDto>();
+            var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
+            return cinema?.Adapt<CinemaDto>();
         }
 
-        public async Task<int> UpdateCinema(CinemaDto cinemaDto)
+        public async Task<int> UpdateCinema(int id, CinemaDto cinemaDto)
         {
-            var cinema = cinemaDto.Adapt<CinemaEntity>();
-            _context.Cinemas.Update(cinema);
+            var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
+            if (cinema == null)
+            {
+                return -1;
+            }
+
+            cinema.Name = cinemaDto.Name;
+            cinema.City = cinemaDto.City;
+            cinema.Address = cinemaDto.Address;
+            cinema.Image = cinemaDto.Image ?? cinema.Image;
             await _context.SaveChangesAsync();
+
             return cinema.Id;
         }
 

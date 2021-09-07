@@ -8,7 +8,7 @@ namespace Cinema.Services.Interfaces
     {
         Task<int> AddCinema(CinemaDto cinemaDto);
         Task<CinemaDto> GetCinemaById(int id);
-        Task<int> UpdateCinema(CinemaDto cinemaDto);
+        Task<int> UpdateCinema(int id, CinemaDto cinemaDto);
         IEnumerable<CinemaDto> GetCinemas();
     }
 }

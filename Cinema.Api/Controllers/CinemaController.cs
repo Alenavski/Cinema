@@ -31,13 +31,33 @@ namespace Cinema.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCinemaById(int id)
         {
-            return Ok(await _cinemaService.GetCinemaById(id));
+            var cinema = await _cinemaService.GetCinemaById(id);
+
+            if (cinema == null)
+            {
+                return NotFound(new
+                {
+                    message = "Such cinema doesn't exist"
+                });
+            }
+
+            return Ok(cinema);
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> EditCinema(int id, [FromBody] CinemaDto cinemaDto)
         {
-            return Ok(await _cinemaService.UpdateCinema(cinemaDto));
+            var cinemaId = await _cinemaService.UpdateCinema(id, cinemaDto);
+
+            if (cinemaId == -1)
+            {
+                return NotFound(new
+                {
+                    message = "Such cinema doesn't exist"
+                });
+            }
+
+            return Ok(cinemaId);
         }
     }
 }
