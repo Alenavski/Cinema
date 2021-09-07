@@ -31,7 +31,7 @@ namespace Cinema.Services
             return cinema?.Adapt<CinemaDto>();
         }
 
-        public async Task<string> UpdateCinema(int id, CinemaDto cinemaDto)
+        public async Task UpdateCinema(int id, CinemaDto cinemaDto)
         {
             var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -40,8 +40,6 @@ namespace Cinema.Services
             cinema.Address = cinemaDto.Address;
             cinema.Image = cinemaDto.Image ?? cinema.Image;
             await _context.SaveChangesAsync();
-
-            return "Cinema " + cinemaDto.Name + " updated!";
         }
 
         public IEnumerable<CinemaDto> GetCinemas()

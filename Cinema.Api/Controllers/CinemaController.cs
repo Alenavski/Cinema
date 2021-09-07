@@ -61,7 +61,8 @@ namespace Cinema.Api.Controllers
                 );
             }
 
-            return Ok(await _cinemaService.UpdateCinema(id, cinemaDto));
+            await _cinemaService.UpdateCinema(id, cinemaDto);
+            return Ok();
         }
     }
 }
