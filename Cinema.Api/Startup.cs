@@ -1,20 +1,16 @@
 using Cinema.Api.Tools;
 using Cinema.Api.Tools.Interfaces;
-
 using Cinema.DB.EF;
-using Microsoft.EntityFrameworkCore;
-
 using Cinema.Services;
 using Cinema.Services.Interfaces;
 using Cinema.Services.Options;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 

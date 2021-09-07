@@ -22,6 +22,12 @@ namespace Cinema.Api.Controllers
             return Ok(await _cinemaService.AddCinema(cinemaDto));
         }
 
+        [HttpGet]
+        public IActionResult GetCinemas()
+        {
+            return Ok(_cinemaService.GetCinemas());
+        }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCinemaById(int id)
         {
@@ -32,12 +38,6 @@ namespace Cinema.Api.Controllers
         public async Task<IActionResult> EditCinema(int id, [FromBody] CinemaDto cinemaDto)
         {
             return Ok(await _cinemaService.UpdateCinema(cinemaDto));
-        }
-
-        [HttpGet]
-        public IActionResult GetCinemas()
-        {
-            return Ok(_cinemaService.GetCinemas());
         }
     }
 }
