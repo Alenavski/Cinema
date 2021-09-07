@@ -39,7 +39,9 @@ namespace Cinema.Api
             );
             var authOptions = new AuthOptions();
             Configuration.GetSection(AuthOptions.Position).Bind(authOptions);
+            
             services.AddControllers();
+            
             services.AddDbContext<ApplicationContext>(
                 options => options.UseSqlServer("name=DatabaseOptions:ConnectionString"));
             services.AddCors(
@@ -55,9 +57,12 @@ namespace Cinema.Api
                     );
                 }
             );
+            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthTool, AuthTool>();
             services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<ICinemaService, CinemaService>();
+            
             services.AddSwaggerGen(
                 c =>
                 {
@@ -71,6 +76,7 @@ namespace Cinema.Api
                     );
                 }
             );
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
                     options => 
