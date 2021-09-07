@@ -35,10 +35,12 @@ namespace Cinema.Api.Controllers
 
             if (cinema == null)
             {
-                return NotFound(new
-                {
-                    message = "Such cinema doesn't exist"
-                });
+                return NotFound(
+                    new
+                    {
+                        message = "Such cinema doesn't exist"
+                    }
+                );
             }
 
             return Ok(cinema);
@@ -47,17 +49,19 @@ namespace Cinema.Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> EditCinema(int id, [FromBody] CinemaDto cinemaDto)
         {
-            var cinemaId = await _cinemaService.UpdateCinema(id, cinemaDto);
+            var cinema = await _cinemaService.GetCinemaById(id);
 
-            if (cinemaId == -1)
+            if (cinema == null)
             {
-                return NotFound(new
-                {
-                    message = "Such cinema doesn't exist"
-                });
+                return NotFound(
+                    new
+                    {
+                        message = "Such cinema doesn't exist"
+                    }
+                );
             }
 
-            return Ok(cinemaId);
+            return Ok(await _cinemaService.UpdateCinema(id, cinemaDto));
         }
     }
 }
