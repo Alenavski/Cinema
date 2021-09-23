@@ -64,5 +64,24 @@ namespace Cinema.Api.Controllers
             await _cinemaService.UpdateCinema(id, cinemaDto);
             return Ok();
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteCinema(int id)
+        {
+            var cinema = await _cinemaService.GetCinemaById(id);
+
+            if (cinema == null)
+            {
+                return NotFound(
+                    new
+                    {
+                        message = "Such cinema doesn't exist"
+                    }
+                );
+            }
+
+            await _cinemaService.DeleteCinema(id);
+            return Ok();
+        }
     }
 }

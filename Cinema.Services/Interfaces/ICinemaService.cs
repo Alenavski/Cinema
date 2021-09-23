@@ -10,5 +10,6 @@ namespace Cinema.Services.Interfaces
         Task<CinemaDto> GetCinemaById(int id);
         Task UpdateCinema(int id, CinemaDto cinemaDto);
         IEnumerable<CinemaDto> GetCinemas();
+        Task DeleteCinema(int id);
     }
 }

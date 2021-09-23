@@ -27,7 +27,8 @@ namespace Cinema.Services
 
         public async Task<CinemaDto> GetCinemaById(int id)
         {
-            var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
+            var cinema = await _context.Cinemas.Include(c => c.Halls)
+                .FirstOrDefaultAsync(c => c.Id == id);
             return cinema?.Adapt<CinemaDto>();
         }
 
@@ -44,7 +45,15 @@ namespace Cinema.Services
 
         public IEnumerable<CinemaDto> GetCinemas()
         {
-            return _context.Cinemas.Adapt<CinemaDto[]>();
+            return _context.Cinemas.Include(c => c.Halls)
+                .Adapt<CinemaDto[]>();
+        }
+
+        public async Task DeleteCinema(int id)
+        {
+            var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
+            _context.Cinemas.Remove(cinema);
+            await _context.SaveChangesAsync();
         }
     }
 }
