@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.Services.Dtos
 {
@@ -10,10 +11,13 @@ namespace Cinema.Services.Dtos
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public HallDto(int id, string name)
+        public ICollection<SeatDto> Seats { get; set; }
+
+        public HallDto(int id, string name, ICollection<SeatDto> seats)
         {
             Id = id;
             Name = name;
+            Seats = seats;
         }
     }
 }
