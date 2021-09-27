@@ -17,23 +17,25 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public async Task<HallDto> GetHallById(int id)
+        public async Task<HallDto> GetHallByIdAsync(int id)
         {
-            var hall = await _context.Halls.Include(h => h.Seats)
+            return await _context.Halls
+                .Include(h => h.Seats)
+                .ProjectToType<HallDto>()
                 .FirstOrDefaultAsync(h => h.Id == id);
-            return hall?.Adapt<HallDto>();
         }
 
-        public async Task DeleteHall(int id)
+        public async Task DeleteHallAsync(int id)
         {
             var hall = await _context.Halls.FirstOrDefaultAsync(h => h.Id == id);
             _context.Halls.Remove(hall);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateHall(int id, HallDto hallDto)
+        public async Task UpdateHallAsync(int id, HallDto hallDto)
         {
-            var hall = await _context.Halls.Include(h => h.Seats)
+            var hall = await _context.Halls
+                .Include(h => h.Seats)
                 .FirstOrDefaultAsync(h => h.Id == id);
 
             hall.Name = hallDto.Name;
@@ -41,9 +43,10 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<int> AddHall(int cinemaId, HallDto hallDto)
+        public async Task<int> AddHallAsync(int cinemaId, HallDto hallDto)
         {
-            var cinema = await _context.Cinemas.Include(c => c.Halls)
+            var cinema = await _context.Cinemas
+                .Include(c => c.Halls)
                 .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             var hall = hallDto.Adapt<HallEntity>();

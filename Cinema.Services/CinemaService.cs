@@ -17,7 +17,7 @@ namespace Cinema.Services
         {
             _context = context;
         }
-        public async Task<int> AddCinema(CinemaDto cinemaDto)
+        public async Task<int> AddCinemaAsync(CinemaDto cinemaDto)
         {
             var cinemaEntity = cinemaDto.Adapt<CinemaEntity>();
             await _context.Cinemas.AddAsync(cinemaEntity);
@@ -25,14 +25,15 @@ namespace Cinema.Services
             return cinemaEntity.Id;
         }
 
-        public async Task<CinemaDto> GetCinemaById(int id)
+        public async Task<CinemaDto> GetCinemaByIdAsync(int id)
         {
-            var cinema = await _context.Cinemas.Include(c => c.Halls)
+            return await _context.Cinemas
+                .Include(c => c.Halls)
+                .ProjectToType<CinemaDto>()
                 .FirstOrDefaultAsync(c => c.Id == id);
-            return cinema?.Adapt<CinemaDto>();
         }
 
-        public async Task UpdateCinema(int id, CinemaDto cinemaDto)
+        public async Task UpdateCinemaAsync(int id, CinemaDto cinemaDto)
         {
             var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -43,13 +44,13 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<CinemaDto> GetCinemas()
+        public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
         {
-            return _context.Cinemas.Include(c => c.Halls)
-                .Adapt<CinemaDto[]>();
+            return await _context.Cinemas.Include(c => c.Halls)
+                .ProjectToType<CinemaDto>().ToListAsync();
         }
 
-        public async Task DeleteCinema(int id)
+        public async Task DeleteCinemaAsync(int id)
         {
             var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == id);
             _context.Cinemas.Remove(cinema);

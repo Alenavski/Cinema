@@ -6,10 +6,10 @@ namespace Cinema.Services.Interfaces
 {
     public interface ICinemaService
     {
-        Task<int> AddCinema(CinemaDto cinemaDto);
-        Task<CinemaDto> GetCinemaById(int id);
-        Task UpdateCinema(int id, CinemaDto cinemaDto);
-        IEnumerable<CinemaDto> GetCinemas();
-        Task DeleteCinema(int id);
+        Task<int> AddCinemaAsync(CinemaDto cinemaDto);
+        Task<CinemaDto> GetCinemaByIdAsync(int id);
+        Task UpdateCinemaAsync(int id, CinemaDto cinemaDto);
+        Task<IEnumerable<CinemaDto>> GetCinemasAsync();
+        Task DeleteCinemaAsync(int id);
     }
 }

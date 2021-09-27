@@ -19,19 +19,19 @@ namespace Cinema.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCinema([FromBody] CinemaDto cinemaDto)
         {
-            return Ok(await _cinemaService.AddCinema(cinemaDto));
+            return Ok(await _cinemaService.AddCinemaAsync(cinemaDto));
         }
 
         [HttpGet]
         public IActionResult GetCinemas()
         {
-            return Ok(_cinemaService.GetCinemas());
+            return Ok(_cinemaService.GetCinemasAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCinemaById(int id)
         {
-            var cinema = await _cinemaService.GetCinemaById(id);
+            var cinema = await _cinemaService.GetCinemaByIdAsync(id);
 
             if (cinema == null)
             {
@@ -49,7 +49,7 @@ namespace Cinema.Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> EditCinema(int id, [FromBody] CinemaDto cinemaDto)
         {
-            var cinema = await _cinemaService.GetCinemaById(id);
+            var cinema = await _cinemaService.GetCinemaByIdAsync(id);
 
             if (cinema == null)
             {
@@ -61,14 +61,14 @@ namespace Cinema.Api.Controllers
                 );
             }
 
-            await _cinemaService.UpdateCinema(id, cinemaDto);
+            await _cinemaService.UpdateCinemaAsync(id, cinemaDto);
             return Ok();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCinema(int id)
         {
-            var cinema = await _cinemaService.GetCinemaById(id);
+            var cinema = await _cinemaService.GetCinemaByIdAsync(id);
 
             if (cinema == null)
             {
@@ -80,7 +80,7 @@ namespace Cinema.Api.Controllers
                 );
             }
 
-            await _cinemaService.DeleteCinema(id);
+            await _cinemaService.DeleteCinemaAsync(id);
             return Ok();
         }
     }

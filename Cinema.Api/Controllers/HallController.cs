@@ -19,13 +19,13 @@ namespace Cinema.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddHall(int cinemaId, [FromBody] HallDto hallDto)
         {
-            return Ok(await _hallService.AddHall(cinemaId, hallDto));
+            return Ok(await _hallService.AddHallAsync(cinemaId, hallDto));
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetHall(int id)
         {
-            var hall = await _hallService.GetHallById(id);
+            var hall = await _hallService.GetHallByIdAsync(id);
 
             if (hall == null)
             {
@@ -43,7 +43,7 @@ namespace Cinema.Api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteHall(int id)
         {
-            var hall = await _hallService.GetHallById(id);
+            var hall = await _hallService.GetHallByIdAsync(id);
 
             if (hall == null)
             {
@@ -55,14 +55,14 @@ namespace Cinema.Api.Controllers
                 );
             }
 
-            await _hallService.DeleteHall(id);
+            await _hallService.DeleteHallAsync(id);
             return Ok();
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateHall(int id, [FromQuery] HallDto hallDto)
         {
-            var hall = await _hallService.GetHallById(id);
+            var hall = await _hallService.GetHallByIdAsync(id);
 
             if (hall == null)
             {
@@ -74,7 +74,7 @@ namespace Cinema.Api.Controllers
                 );
             }
 
-            await _hallService.UpdateHall(id, hallDto);
+            await _hallService.UpdateHallAsync(id, hallDto);
             return Ok();
         }
     }
