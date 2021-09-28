@@ -2,12 +2,10 @@
 
 namespace Cinema.DB.Entities
 {
-    public class HallEntity
+    public class SeatTypeEntity
     {
-        public int Id { get; set; }
+        public byte Id { get; set; }
         public string Name { get; set; }
-        public CinemaEntity Cinema { get; set; }
         public ICollection<SeatEntity> Seats { get; set; }
-        public ICollection<ShowtimeEntity> Showtimes { get; set; }
     }
 }

@@ -11,14 +11,13 @@ namespace Cinema.Services.Dtos
         [MaxLength(50)]
         public string Name { get; set; }
 
-        [Required]
-        public CinemaDto Cinema { get; set; }
+        public ICollection<SeatDto> Seats { get; set; }
 
-        public HallDto(int id, string name, CinemaDto cinema)
+        public HallDto(int id, string name, ICollection<SeatDto> seats)
         {
             Id = id;
             Name = name;
-            Cinema = cinema;
+            Seats = seats;
         }
     }
 }

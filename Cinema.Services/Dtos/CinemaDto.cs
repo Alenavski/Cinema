@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.Services.Dtos
 {
@@ -21,13 +22,16 @@ namespace Cinema.Services.Dtos
 
         public byte[] Image { get; set; }
 
-        public CinemaDto(int id, string name, string city, string address, byte[] image)
+        public ICollection<HallDto> Halls { get; set; }
+
+        public CinemaDto(int id, string name, string city, string address, byte[] image, ICollection<HallDto> halls)
         {
             Id = id;
             Name = name;
             City = city;
             Address = address;
             Image = image;
+            Halls = halls;
         }
     }
 }
