@@ -46,8 +46,10 @@ namespace Cinema.Services
 
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
         {
-            return await _context.Cinemas.Include(c => c.Halls)
-                .ProjectToType<CinemaDto>().ToListAsync();
+            return await _context.Cinemas
+                .Include(c => c.Halls)
+                .ProjectToType<CinemaDto>()
+                .ToListAsync();
         }
 
         public async Task DeleteCinemaAsync(int id)

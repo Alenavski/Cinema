@@ -3,6 +3,3 @@
     [Name] NVARCHAR (25) NOT NULL,
     CONSTRAINT [PK_SeatTypes] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-

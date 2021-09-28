@@ -10,7 +10,7 @@ namespace Cinema.Services
 {
     public class HallService : IHallService
     {
-        private ApplicationContext _context;
+        private readonly ApplicationContext _context;
 
         public HallService(ApplicationContext context)
         {

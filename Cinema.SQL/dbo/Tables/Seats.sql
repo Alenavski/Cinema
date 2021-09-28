@@ -9,8 +9,3 @@
     CONSTRAINT [FK_Seats_Halls] FOREIGN KEY ([HallId]) REFERENCES [dbo].[Halls] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT [FK_Seats_SeatTypes] FOREIGN KEY ([SeatTypeId]) REFERENCES [dbo].[SeatTypes] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
-
-

@@ -23,9 +23,9 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCinemas()
+        public async Task<IActionResult> GetCinemas()
         {
-            return Ok(_cinemaService.GetCinemasAsync());
+            return Ok(await _cinemaService.GetCinemasAsync());
         }
 
         [HttpGet("{id:int}")]
