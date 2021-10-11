@@ -10,6 +10,8 @@ namespace Cinema.DB.EF
         public DbSet<MovieEntity> Movies { get; set; }
         public DbSet<HallEntity> Halls { get; set; }
         public DbSet<CinemaEntity> Cinemas { get; set; }
+        public DbSet<SeatEntity> Seats { get; set; }
+        public DbSet<SeatTypeEntity> SeatTypes { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {

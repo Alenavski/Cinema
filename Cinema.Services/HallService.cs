@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
 using Cinema.Services.Dtos;
@@ -21,8 +22,9 @@ namespace Cinema.Services
         {
             return await _context.Halls
                 .Include(h => h.Seats)
+                .Where(h => h.Id == id)
                 .ProjectToType<HallDto>()
-                .FirstOrDefaultAsync(h => h.Id == id);
+                .SingleOrDefaultAsync();
         }
 
         public async Task DeleteHallAsync(int id)
@@ -36,10 +38,28 @@ namespace Cinema.Services
         {
             var hall = await _context.Halls
                 .Include(h => h.Seats)
+                .ThenInclude(s => s.SeatType)
                 .FirstOrDefaultAsync(h => h.Id == id);
 
             hall.Name = hallDto.Name;
-            hall.Seats = hallDto.Seats.Adapt<SeatEntity[]>();
+
+            var seatTypes = await _context.SeatTypes.ToListAsync();
+            foreach (var seat in hallDto.Seats)
+            {
+                if (seat.Id == 0)
+                {
+                    var seatType = seatTypes.SingleOrDefault(st => st.Id == seat.SeatType.Id);
+                    await _context.Seats.AddAsync(new SeatEntity
+                    {
+                        Hall = hall,
+                        Index = seat.Index,
+                        Id = seat.Id,
+                        Place = seat.Place,
+                        Row = seat.Row,
+                        SeatType = seatType
+                    });
+                }
+            }
             await _context.SaveChangesAsync();
         }
 
