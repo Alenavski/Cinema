@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cinema.Api.Controllers
 {
     [ApiController]
-    [Route("cinemas/{cinemaId:int}/halls/{hallId:int}/seats")]
+    [Route("seats")]
     public class SeatController : ControllerBase
     {
         private readonly ISeatService _seatService;

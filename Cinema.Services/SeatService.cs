@@ -12,7 +12,7 @@ namespace Cinema.Services
 {
     public class SeatService : ISeatService
     {
-        private ApplicationContext _context;
+        private readonly ApplicationContext _context;
 
         public SeatService(ApplicationContext context)
         {

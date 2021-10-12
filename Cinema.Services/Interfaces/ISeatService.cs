@@ -6,7 +6,7 @@ namespace Cinema.Services.Interfaces
 {
     public interface ISeatService
     {
-        public Task DeleteSeatsAsync(IEnumerable<SeatDto> seatDtos);
-        public Task UpdateSeatsAsync(IEnumerable<SeatDto> seatDtos);
+        Task DeleteSeatsAsync(IEnumerable<SeatDto> seatDtos);
+        Task UpdateSeatsAsync(IEnumerable<SeatDto> seatDtos);
     }
 }
