@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
@@ -29,8 +30,10 @@ namespace Cinema.Services
         {
             return await _context.Cinemas
                 .Include(c => c.Halls)
+                .ThenInclude(h => h.Seats)
+                .Where(c => c.Id == id)
                 .ProjectToType<CinemaDto>()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .SingleOrDefaultAsync();
         }
 
         public async Task UpdateCinemaAsync(int id, CinemaDto cinemaDto)

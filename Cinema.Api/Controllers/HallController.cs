@@ -60,7 +60,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateHall(int id, [FromQuery] HallDto hallDto)
+        public async Task<IActionResult> UpdateHall(int id, [FromBody] HallDto hallDto)
         {
             var hall = await _hallService.GetHallByIdAsync(id);
 
