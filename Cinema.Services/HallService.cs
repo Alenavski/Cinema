@@ -49,15 +49,17 @@ namespace Cinema.Services
                 if (seat.Id == 0)
                 {
                     var seatType = seatTypes.SingleOrDefault(st => st.Id == seat.SeatType.Id);
-                    await _context.Seats.AddAsync(new SeatEntity
-                    {
-                        Hall = hall,
-                        Index = seat.Index,
-                        Id = seat.Id,
-                        Place = seat.Place,
-                        Row = seat.Row,
-                        SeatType = seatType
-                    });
+                    await _context.Seats.AddAsync(
+                        new SeatEntity
+                        {
+                            Hall = hall,
+                            Index = seat.Index,
+                            Id = seat.Id,
+                            Place = seat.Place,
+                            Row = seat.Row,
+                            SeatType = seatType
+                        }
+                    );
                 }
             }
             await _context.SaveChangesAsync();
