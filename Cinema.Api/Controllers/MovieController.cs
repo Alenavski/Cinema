@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
@@ -18,7 +18,14 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetMovies([FromQuery] ShowtimeFilterDto showtimeFilterDto)
+        public async Task<IActionResult> GetMovies([FromQuery] DateTime date)
+        {
+            var movies = await _movieService.GetMoviesAsync(date);
+            return Ok(movies);
+        }
+
+        [HttpGet("/showtimes")]
+        public IActionResult GetMoviesWithShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
         {
             var movies = _movieService.GetMoviesByFilter(showtimeFilterDto);
             return Ok(movies);

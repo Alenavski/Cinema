@@ -56,6 +56,19 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<MovieDto>> GetMoviesAsync(DateTime dateTime)
+        {
+            var movies = _context.Movies.AsQueryable();
+            if (!dateTime.Equals(DateTime.MinValue))
+            {
+                movies = movies
+                    .Where(m =>
+                        DateTime.Compare(m.StartDate, dateTime) <= 0
+                        && DateTime.Compare(m.EndDate, dateTime) >= 0);
+            }
+            return await movies.ProjectToType<MovieDto>().ToListAsync();
+        }
+
         public IEnumerable<MovieDto> GetMoviesByFilter(ShowtimeFilterDto filter)
         {
             filter.StartTime ??= new TimeSpan(0, 0, 0);

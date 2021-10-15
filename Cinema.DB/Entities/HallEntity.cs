@@ -7,6 +7,7 @@ namespace Cinema.DB.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public CinemaEntity Cinema { get; set; }
+        public ICollection<ServiceEntity> Services { get; set; }
         public ICollection<SeatEntity> Seats { get; set; }
         public ICollection<ShowtimeEntity> Showtimes { get; set; }
     }
