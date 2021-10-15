@@ -56,13 +56,23 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddServiceToHall(int hallId, int serviceId)
+        public async Task AddServiceToHallAsync(int hallId, int serviceId)
         {
             var service = await _context.Services.SingleOrDefaultAsync(s => s.Id == serviceId);
             var hall = await _context.Halls
                 .Include(h => h.Services)
                 .SingleOrDefaultAsync(h => h.Id == hallId);
             hall.Services.Add(service);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteServiceFromHallAsync(int hallId, int serviceId)
+        {
+            var service = await _context.Services.SingleOrDefaultAsync(s => s.Id == serviceId);
+            var hall = await _context.Halls
+                .Include(h => h.Services)
+                .SingleOrDefaultAsync(h => h.Id == hallId);
+            hall.Services.Remove(service);
             await _context.SaveChangesAsync();
         }
     }
