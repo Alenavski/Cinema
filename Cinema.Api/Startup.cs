@@ -65,7 +65,8 @@ namespace Cinema.Api
             services.AddScoped<IHallService, HallService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IServiceService, ServiceService>();
-            
+            services.AddScoped<IHallServiceService, HallServiceService>();
+
             services.AddSwaggerGen(
                 c =>
                 {

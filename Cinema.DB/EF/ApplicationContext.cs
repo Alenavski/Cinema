@@ -13,6 +13,7 @@ namespace Cinema.DB.EF
         public DbSet<SeatEntity> Seats { get; set; }
         public DbSet<SeatTypeEntity> SeatTypes { get; set; }
         public DbSet<ServiceEntity> Services { get; set; }
+        public DbSet<HallServiceEntity> HallsServices { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -25,6 +26,15 @@ namespace Cinema.DB.EF
                 .Entity<UserEntity>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+            modelBuilder
+                .Entity<HallServiceEntity>()
+                .HasKey(
+                    entity => new
+                    {
+                        entity.HallId,
+                        entity.ServiceId
+                    }
+                );
         }
     }
 }

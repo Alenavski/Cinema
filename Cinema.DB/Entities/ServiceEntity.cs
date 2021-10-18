@@ -6,6 +6,6 @@ namespace Cinema.DB.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<HallEntity> Halls { get; set; }
+        public ICollection<HallServiceEntity> Halls { get; set; }
     }
 }

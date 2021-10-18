@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
@@ -25,20 +26,12 @@ namespace Cinema.Services
                 .ToListAsync();
         }
 
-        public async Task<ServiceDto> GetServiceAsync(int id)
+        public async Task<ServiceDto> GetServiceByIdAsync(int id)
         {
             return await _context.Services
+                .Where(s => s.Id == id)
                 .ProjectToType<ServiceDto>()
-                .SingleOrDefaultAsync(s => s.Id == id);
-        }
-
-        public async Task<IEnumerable<ServiceDto>> GetServicesOfHallAsync(int hallId)
-        {
-            var hall = await _context.Halls
-                .Include(h => h.Services)
-                .ProjectToType<HallDto>()
-                .SingleOrDefaultAsync(h => h.Id == hallId);
-            return hall.Services;
+                .SingleOrDefaultAsync();
         }
 
         public async Task<int> AddServiceAsync(ServiceDto serviceDto)
@@ -53,26 +46,6 @@ namespace Cinema.Services
         {
             var service = await _context.Services.SingleOrDefaultAsync(s => s.Id == id);
             _context.Services.Remove(service);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddServiceToHallAsync(int hallId, int serviceId)
-        {
-            var service = await _context.Services.SingleOrDefaultAsync(s => s.Id == serviceId);
-            var hall = await _context.Halls
-                .Include(h => h.Services)
-                .SingleOrDefaultAsync(h => h.Id == hallId);
-            hall.Services.Add(service);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteServiceFromHallAsync(int hallId, int serviceId)
-        {
-            var service = await _context.Services.SingleOrDefaultAsync(s => s.Id == serviceId);
-            var hall = await _context.Halls
-                .Include(h => h.Services)
-                .SingleOrDefaultAsync(h => h.Id == hallId);
-            hall.Services.Remove(service);
             await _context.SaveChangesAsync();
         }
     }

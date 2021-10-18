@@ -22,16 +22,10 @@ namespace Cinema.Api.Controllers
             return Ok(await _serviceService.GetServicesAsync());
         }
 
-        [HttpGet("/halls/{hallId:int}")]
-        public async Task<IActionResult> GetServicesOfHall(int hallId)
-        {
-            return Ok(await _serviceService.GetServicesOfHallAsync(hallId));
-        }
-
         [HttpDelete("/{id:int}")]
         public async Task<IActionResult> DeleteService(int id)
         {
-            var service = await _serviceService.GetServiceAsync(id);
+            var service = await _serviceService.GetServiceByIdAsync(id);
 
             if (service == null)
             {
@@ -51,20 +45,6 @@ namespace Cinema.Api.Controllers
         public async Task<IActionResult> AddService(ServiceDto serviceDto)
         {
             return Ok(await _serviceService.AddServiceAsync(serviceDto));
-        }
-
-        [HttpPost("/halls/{hallId:int}")]
-        public async Task<IActionResult> AddServiceToHall(int hallId, [FromBody] ServiceDto serviceDto)
-        {
-            await _serviceService.AddServiceToHallAsync(hallId, serviceDto.Id);
-            return Ok();
-        }
-
-        [HttpDelete("/{serviceId:int}/halls/{hallId:int}")]
-        public async Task<IActionResult> DeleteServiceFromHall(int serviceId, int hallId)
-        {
-            await _serviceService.DeleteServiceFromHallAsync(hallId, serviceId);
-            return Ok();
         }
     }
 }
