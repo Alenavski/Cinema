@@ -2,10 +2,10 @@
 
 namespace Cinema.DB.Entities
 {
-    public class ServiceEntity
+    public class AdditionEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<HallServiceEntity> Halls { get; set; }
+        public ICollection<HallAdditionEntity> Halls { get; set; }
     }
 }

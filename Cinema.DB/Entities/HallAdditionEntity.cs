@@ -1,11 +1,11 @@
 ﻿namespace Cinema.DB.Entities
 {
-    public class HallServiceEntity
+    public class HallAdditionEntity
     {
         public int HallId { get; set; }
         public HallEntity Hall { get; set; }
-        public int ServiceId { get; set; }
-        public ServiceEntity Service { get; set; }
+        public int AdditionId { get; set; }
+        public AdditionEntity Addition { get; set; }
         public decimal Price { get; set; }
     }
 }

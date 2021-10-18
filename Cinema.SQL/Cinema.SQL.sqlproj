@@ -69,8 +69,8 @@
     <Build Include="dbo\Tables\Cinemas.sql" />
     <Build Include="dbo\Tables\SeatTypes.sql" />
     <Build Include="dbo\Tables\Seats.sql" />
-    <Build Include="dbo\Tables\Services.sql" />
-    <Build Include="dbo\Tables\HallsServices.sql" />
+    <Build Include="dbo\Tables\HallsAdditions.sql" />
+    <Build Include="dbo\Tables\Additions.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cinema.SQL.sqlproj.user" />

@@ -12,8 +12,8 @@ namespace Cinema.DB.EF
         public DbSet<CinemaEntity> Cinemas { get; set; }
         public DbSet<SeatEntity> Seats { get; set; }
         public DbSet<SeatTypeEntity> SeatTypes { get; set; }
-        public DbSet<ServiceEntity> Services { get; set; }
-        public DbSet<HallServiceEntity> HallsServices { get; set; }
+        public DbSet<AdditionEntity> Additions { get; set; }
+        public DbSet<HallAdditionEntity> HallsAdditions { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -27,12 +27,12 @@ namespace Cinema.DB.EF
                 .HasIndex(u => u.Email)
                 .IsUnique();
             modelBuilder
-                .Entity<HallServiceEntity>()
+                .Entity<HallAdditionEntity>()
                 .HasKey(
                     entity => new
                     {
                         entity.HallId,
-                        entity.ServiceId
+                        entity.AdditionId
                     }
                 );
         }
