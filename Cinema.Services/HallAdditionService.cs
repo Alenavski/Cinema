@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
@@ -18,13 +19,14 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<HallAdditionDto>> GetAdditionsOfHallAsync(int hallId)
+        public async Task<IEnumerable<HallAdditionDto>> GetHallAdditionsAsync(int hallId)
         {
-            var hall = await _context.Halls
-                .Include(h => h.Additions)
-                .ProjectToType<HallDto>()
-                .SingleOrDefaultAsync(h => h.Id == hallId);
-            return hall.Additions;
+            return await _context.HallsAdditions
+                .Include(ha => ha.Hall)
+                .Include(ha => ha.Addition)
+                .Where(ha => ha.Hall.Id == hallId)
+                .ProjectToType<HallAdditionDto>()
+                .ToListAsync();
         }
 
         public async Task AddAdditionToHallAsync(int hallId, int additionId, decimal price)

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cinema.Api.Controllers
 {
     [ApiController]
-    [Route("addition")]
+    [Route("additions")]
     public class AdditionController : ControllerBase
     {
         private readonly IAdditionService _additionService;

@@ -21,9 +21,9 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAdditionsOfHall(int hallId)
+        public async Task<IActionResult> GetHallAdditions(int hallId)
         {
-            return Ok(await _hallAdditionService.GetAdditionsOfHallAsync(hallId));
+            return Ok(await _hallAdditionService.GetHallAdditionsAsync(hallId));
         }
 
         [HttpPost("{additionId:int}")]
