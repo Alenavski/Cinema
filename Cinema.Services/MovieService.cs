@@ -77,7 +77,8 @@ namespace Cinema.Services
                 showtimes = showtimes
                     .Where(s =>
                         DateTime.Compare(s.Movie.StartDate, filter.Date) <= 0
-                        && DateTime.Compare(s.Movie.EndDate, filter.Date) >= 0);
+                        && DateTime.Compare(s.Movie.EndDate, filter.Date) >= 0
+                    );
             }
 
             if (filter.NumberOfFreeSeats != 0)
