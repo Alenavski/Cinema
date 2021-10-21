@@ -19,7 +19,19 @@ namespace Cinema.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddShowtime(int movieId, ShowtimeDto showtimeDto)
         {
-            return Ok(await _showtimeService.AddShowtimeAsync(movieId, showtimeDto));
+            if (await _showtimeService.CanAddShowtime(movieId, showtimeDto))
+            {
+                return Ok(await _showtimeService.AddShowtimeAsync(movieId, showtimeDto));
+            }
+            else
+            {
+                return BadRequest(
+                    new
+                    {
+                        message = "Can't add showtime at time in this hall"
+                    }
+                );
+            }
         }
 
         [HttpDelete("{showtimeId:long}")]

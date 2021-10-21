@@ -81,7 +81,14 @@ namespace Cinema.Api
                     );
                 }
             );
-            
+
+            services.AddMvc()
+                .AddJsonOptions(
+                    options =>
+                        options.JsonSerializerOptions.Converters.Add(new JsonTimeSpanConverter())
+                );
+
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
                     options => 

@@ -19,6 +19,25 @@ namespace Cinema.Services
             _context = context;
         }
 
+        public async Task<bool> CanAddShowtime(int movieId, ShowtimeDto showtimeDto)
+        {
+            var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == movieId);
+            var showtimes = await _context.Showtimes
+                .Include(sh => sh.Hall)
+                .Where(sh => sh.Hall.Id == showtimeDto.Hall.Id)
+                .ToListAsync();
+
+            foreach (var showtime in showtimes)
+            {
+                if (Math.Abs(showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes) <= movie.MinutesLength)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public async Task<long> AddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
         {
             var hall = await _context.Halls
