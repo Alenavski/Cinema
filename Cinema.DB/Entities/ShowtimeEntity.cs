@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Cinema.DB.Entities
 {
@@ -9,5 +10,7 @@ namespace Cinema.DB.Entities
         public short NumberOfFreeSeats { get; set; }
         public MovieEntity Movie { get; set; }
         public HallEntity Hall { get; set; }
+        public ICollection<TicketPriceEntity> Prices { get; set; }
+        public ICollection<ShowtimeAdditionEntity> Additions { get; set; }
     }
 }

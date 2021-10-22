@@ -29,7 +29,8 @@ namespace Cinema.Services
 
             foreach (var showtime in showtimes)
             {
-                if (Math.Abs(showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes) <= movie.MinutesLength)
+                if (showtime.Hall.Id == showtimeDto.Hall.Id 
+                    && Math.Abs(showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes) <= movie.MinutesLength)
                 {
                     return false;
                 }
@@ -38,7 +39,7 @@ namespace Cinema.Services
             return true;
         }
 
-        public async Task<long> AddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
+        public async Task AddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
         {
             var hall = await _context.Halls
                 .Include(h => h.Seats)
@@ -55,7 +56,62 @@ namespace Cinema.Services
             };
             _context.Showtimes.Add(showtime);
             await _context.SaveChangesAsync();
-            return showtime.Id;
+            showtimeDto.Id = showtime.Id;
+
+            await AddPricesForSeatTypesAsync(showtimeDto);
+            await AddAdditionsForShowtimeAsync(showtimeDto);
+        }
+
+        private async Task AddAdditionsForShowtimeAsync(ShowtimeDto showtimeDto)
+        {
+            var showtime = await _context.Showtimes.SingleOrDefaultAsync(sh => sh.Id == showtimeDto.Id);
+            var hallAdditions = await _context.HallsAdditions
+                .Include(ha => ha.Hall)
+                .Include(ha => ha.Addition)
+                .Where(ha => ha.Hall.Id == showtime.Hall.Id)
+                .ToListAsync();
+            foreach (var additionDto in showtimeDto.Additions)
+            {
+                var hallAddition = hallAdditions
+                    .SingleOrDefault(ha => ha.Addition.Id == additionDto.Addition.Id);
+                if (hallAddition != null)
+                {
+                    
+                    await _context.ShowtimesAdditions.AddAsync(
+                        new ShowtimeAdditionEntity
+                        {
+                            Hall = hallAddition.Hall,
+                            Addition = hallAddition.Addition,
+                            Showtime = showtime
+                        }
+                    );
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+        
+        private async Task AddPricesForSeatTypesAsync(ShowtimeDto showtimeDto)
+        {
+            var showtime = await _context.Showtimes.SingleOrDefaultAsync(sh => sh.Id == showtimeDto.Id);
+            var seatTypes = await _context.SeatTypes.ToListAsync();
+            foreach (var price in showtimeDto.Prices)
+            {
+                var seatType = seatTypes.SingleOrDefault(st => st.Id == price.SeatType.Id);
+                if (seatType != null)
+                {
+                    await _context.TicketsPrices.AddAsync(
+                        new TicketPriceEntity
+                        {
+                            Price = price.Price,
+                            SeatType = seatType,
+                            Showtime = showtime
+                        }
+                    );
+                }
+            }
+            
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteShowtime(long id)

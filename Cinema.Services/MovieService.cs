@@ -52,6 +52,7 @@ namespace Cinema.Services
             movie.Title = movieDto.Title;
             movie.EndDate = movieDto.EndDate;
             movie.StartDate = movieDto.StartDate;
+            movie.MinutesLength = movieDto.MinutesLength;
 
             await _context.SaveChangesAsync();
         }

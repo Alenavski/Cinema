@@ -21,7 +21,8 @@ namespace Cinema.Api.Controllers
         {
             if (await _showtimeService.CanAddShowtime(movieId, showtimeDto))
             {
-                return Ok(await _showtimeService.AddShowtimeAsync(movieId, showtimeDto));
+                await _showtimeService.AddShowtimeAsync(movieId, showtimeDto);
+                return Ok();
             }
             else
             {

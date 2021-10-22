@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.Services.Dtos
@@ -14,13 +15,19 @@ namespace Cinema.Services.Dtos
 
         [Required]
         public HallDto Hall { get; set; }
+        
+        public ICollection<ShowtimeAdditionDto> Additions { get; set; }
+        
+        public ICollection<TicketPriceDto> Prices { get; set; }
 
-        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall)
+        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall, ICollection<TicketPriceDto> prices, ICollection<ShowtimeAdditionDto> additions)
         {
             Id = id;
             Time = time;
             NumberOfFreeSeats = numberOfFreeSeats;
             Hall = hall;
+            Prices = prices;
+            Additions = additions;
         }
     }
 }

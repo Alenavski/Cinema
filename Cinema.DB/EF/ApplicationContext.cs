@@ -14,6 +14,8 @@ namespace Cinema.DB.EF
         public DbSet<SeatTypeEntity> SeatTypes { get; set; }
         public DbSet<AdditionEntity> Additions { get; set; }
         public DbSet<HallAdditionEntity> HallsAdditions { get; set; }
+        public DbSet<TicketPriceEntity> TicketsPrices { get; set; }
+        public DbSet<ShowtimeAdditionEntity> ShowtimesAdditions { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -33,6 +35,25 @@ namespace Cinema.DB.EF
                     {
                         entity.HallId,
                         entity.AdditionId
+                    }
+                );
+            modelBuilder
+                .Entity<ShowtimeAdditionEntity>()
+                .HasKey(
+                    entity => new
+                    {
+                        entity.ShowtimeId,
+                        entity.HallId,
+                        entity.AdditionId
+                    }
+                );
+            modelBuilder
+                .Entity<TicketPriceEntity>()
+                .HasKey(
+                    entity => new
+                    {
+                        entity.ShowtimeId,
+                        entity.SeatTypeId
                     }
                 );
         }

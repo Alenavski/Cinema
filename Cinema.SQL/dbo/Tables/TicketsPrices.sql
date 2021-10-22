@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Tickets] (
+﻿CREATE TABLE [dbo].[TicketsPrices] (
     [ShowtimeId] BIGINT          NOT NULL,
     [SeatTypeId] SMALLINT        NOT NULL,
     [Price]      DECIMAL (18, 4) NOT NULL,
