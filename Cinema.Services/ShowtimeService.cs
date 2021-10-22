@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
@@ -19,7 +20,37 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public async Task<bool> CanAddShowtime(int movieId, ShowtimeDto showtimeDto)
+        public IEnumerable<CinemaDto> GetCinemasByMovieShowtimes(int movieId)
+        {
+            var groupCinemasShowtimes = _context.Showtimes
+                .Include(sh => sh.Movie)
+                .Include(sh => sh.Hall)
+                .ThenInclude(h => h.Cinema)
+                .Where(sh => sh.Movie.Id == movieId)
+                .AsEnumerable()
+                .GroupBy(sh => sh.Hall.Cinema);
+
+            var cinemasList = new List<CinemaDto>();
+            foreach (var cinemaShowtimes in groupCinemasShowtimes)
+            {
+                var cinemaDto = cinemaShowtimes.Key.Adapt<CinemaDto>();
+                foreach (var hall in cinemaDto.Halls)
+                {
+                    foreach (var showtimeEntity in cinemaShowtimes)
+                    {
+                        if (hall.Id == showtimeEntity.Hall.Id 
+                            && !cinemasList.Contains(cinemaDto))
+                        {
+                            cinemasList.Add(cinemaDto);
+                        }
+                    }
+                }
+            }
+            
+            return cinemasList;
+        }
+
+        public async Task<bool> CanAddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
         {
             var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == movieId);
             var showtimes = await _context.Showtimes

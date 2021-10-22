@@ -16,10 +16,16 @@ namespace Cinema.Api.Controllers
             _showtimeService = showtimeService;
         }
 
+        [HttpGet("cinemas")]
+        public IActionResult GetCinemasByMovieShowtimes(int movieId)
+        {
+            return Ok(_showtimeService.GetCinemasByMovieShowtimes(movieId));
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddShowtime(int movieId, ShowtimeDto showtimeDto)
         {
-            if (await _showtimeService.CanAddShowtime(movieId, showtimeDto))
+            if (await _showtimeService.CanAddShowtimeAsync(movieId, showtimeDto))
             {
                 await _showtimeService.AddShowtimeAsync(movieId, showtimeDto);
                 return Ok();
