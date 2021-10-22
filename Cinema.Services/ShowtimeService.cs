@@ -52,18 +52,32 @@ namespace Cinema.Services
 
         public async Task<bool> CanAddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
         {
-            var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == movieId);
-            var showtimes = await _context.Showtimes
-                .Include(sh => sh.Hall)
-                .Where(sh => sh.Hall.Id == showtimeDto.Hall.Id)
-                .ToListAsync();
-
-            foreach (var showtime in showtimes)
+            var movieShowtime = await _context.Movies.SingleOrDefaultAsync(m => m.Id == movieId);
+            var movies = await _context.Movies.ToListAsync();
+            foreach (var movie in movies.Where(movie => DateTime.Compare(movie.EndDate, DateTime.Now) >= 0))
             {
-                if (showtime.Hall.Id == showtimeDto.Hall.Id 
-                    && Math.Abs(showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes) <= movie.MinutesLength)
+                var showtimes = await _context.Showtimes
+                    .Include(sh => sh.Hall)
+                    .Include(sh => sh.Movie)
+                    .Where(sh => sh.Movie.Id == movie.Id)
+                    .ToListAsync();
+                
+                foreach (var showtime in showtimes.Where(showtime => showtime.Hall.Id == showtimeDto.Hall.Id))
                 {
-                    return false;
+                    if (showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes > 0)
+                    {
+                        if (showtime.Time.TotalMinutes - showtimeDto.Time.TotalMinutes < movieShowtime.MinutesLength)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (showtimeDto.Time.TotalMinutes - showtime.Time.TotalMinutes < movie.MinutesLength)
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
 
@@ -111,8 +125,7 @@ namespace Cinema.Services
                     await _context.ShowtimesAdditions.AddAsync(
                         new ShowtimeAdditionEntity
                         {
-                            Hall = hallAddition.Hall,
-                            Addition = hallAddition.Addition,
+                            HallAddition = hallAddition,
                             Showtime = showtime
                         }
                     );
