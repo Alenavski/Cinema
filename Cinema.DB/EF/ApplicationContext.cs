@@ -43,7 +43,6 @@ namespace Cinema.DB.EF
                     entity => new
                     {
                         entity.ShowtimeId,
-                        entity.HallId,
                         entity.AdditionId
                     }
                 );

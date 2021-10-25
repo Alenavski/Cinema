@@ -5,6 +5,3 @@
     CONSTRAINT [PK_Halls] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Halls_Cinemas] FOREIGN KEY ([CinemaId]) REFERENCES [dbo].[Cinemas] ([Id]) ON DELETE CASCADE
 );
-
-
-

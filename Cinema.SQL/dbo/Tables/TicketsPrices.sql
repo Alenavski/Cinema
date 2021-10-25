@@ -6,4 +6,3 @@
     CONSTRAINT [FK_ShowtimesSeatTypes_SeatTypes] FOREIGN KEY ([SeatTypeId]) REFERENCES [dbo].[SeatTypes] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_ShowtimesSeatTypes_Showtimes] FOREIGN KEY ([ShowtimeId]) REFERENCES [dbo].[Showtimes] ([Id]) ON DELETE CASCADE
 );
-

@@ -20,7 +20,8 @@ namespace Cinema.Services.Dtos
         
         public ICollection<TicketPriceDto> Prices { get; set; }
 
-        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall, ICollection<TicketPriceDto> prices, ICollection<ShowtimeAdditionDto> additions)
+        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall,
+            ICollection<TicketPriceDto> prices, ICollection<ShowtimeAdditionDto> additions)
         {
             Id = id;
             Time = time;

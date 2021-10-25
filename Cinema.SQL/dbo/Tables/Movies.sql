@@ -8,8 +8,3 @@
     [MinutesLength] SMALLINT        NOT NULL,
     CONSTRAINT [PK_Movies] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
-

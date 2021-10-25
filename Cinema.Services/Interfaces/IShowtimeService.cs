@@ -6,7 +6,7 @@ namespace Cinema.Services.Interfaces
 {
     public interface IShowtimeService
     {
-        IEnumerable<CinemaDto> GetCinemasByMovieShowtimes(int movieId);
+        IEnumerable<CinemaDto> GetCinemasByMovieId(int movieId);
         Task<bool> CanAddShowtimeAsync(int movieId, ShowtimeDto showtimeDto);
         Task AddShowtimeAsync(int movieId, ShowtimeDto showtimeDto);
         Task DeleteShowtime(long id);

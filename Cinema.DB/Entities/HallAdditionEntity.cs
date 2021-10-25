@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Cinema.DB.Entities
+﻿namespace Cinema.DB.Entities
 {
     public class HallAdditionEntity
     {
@@ -9,7 +7,5 @@ namespace Cinema.DB.Entities
         public int AdditionId { get; set; }
         public AdditionEntity Addition { get; set; }
         public decimal Price { get; set; }
-        
-        public ICollection<ShowtimeAdditionEntity> ShowtimesAdditions { get; set; }
     }
 }

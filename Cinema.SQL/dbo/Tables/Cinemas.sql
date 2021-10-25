@@ -6,6 +6,3 @@
     [Image]   VARBINARY (MAX) NULL,
     CONSTRAINT [PK_Cinemas] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-

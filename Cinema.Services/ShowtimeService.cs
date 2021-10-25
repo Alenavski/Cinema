@@ -20,7 +20,7 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public IEnumerable<CinemaDto> GetCinemasByMovieShowtimes(int movieId)
+        public IEnumerable<CinemaDto> GetCinemasByMovieId(int movieId)
         {
             var groupCinemasShowtimes = _context.Showtimes
                 .Include(sh => sh.Movie)
@@ -34,17 +34,16 @@ namespace Cinema.Services
             foreach (var cinemaShowtimes in groupCinemasShowtimes)
             {
                 var cinemaDto = cinemaShowtimes.Key.Adapt<CinemaDto>();
-                foreach (var hall in cinemaDto.Halls)
-                {
-                    foreach (var showtimeEntity in cinemaShowtimes)
-                    {
-                        if (hall.Id == showtimeEntity.Hall.Id 
-                            && !cinemasList.Contains(cinemaDto))
-                        {
-                            cinemasList.Add(cinemaDto);
-                        }
-                    }
-                }
+
+                var halls = cinemaDto.Halls.GroupJoin(
+                    cinemaShowtimes,
+                    hall => hall.Id,
+                    showtime => showtime.Hall.Id,
+                    (hall, showtime) => hall
+                ).ToList();
+
+                cinemaDto.Halls = halls;
+                cinemasList.Add(cinemaDto);
             }
             
             return cinemasList;
@@ -110,23 +109,25 @@ namespace Cinema.Services
         private async Task AddAdditionsForShowtimeAsync(ShowtimeDto showtimeDto)
         {
             var showtime = await _context.Showtimes.SingleOrDefaultAsync(sh => sh.Id == showtimeDto.Id);
+            /*var additions = _context.Additions
+                .Include(a => a.Halls)
+                .ThenInclude(ah => ah.Hall);*/
             var hallAdditions = await _context.HallsAdditions
-                .Include(ha => ha.Hall)
-                .Include(ha => ha.Addition)
-                .Where(ha => ha.Hall.Id == showtime.Hall.Id)
+                //.Include(ha => ha.Hall)
+                //.Include(ha => ha.Addition)
+                .Where(ha => ha.HallId == showtime.Hall.Id)
                 .ToListAsync();
             foreach (var additionDto in showtimeDto.Additions)
             {
                 var hallAddition = hallAdditions
-                    .SingleOrDefault(ha => ha.Addition.Id == additionDto.Addition.Id);
+                    .SingleOrDefault(ha => ha.AdditionId == additionDto.Addition.Id);
                 if (hallAddition != null)
                 {
-                    
                     await _context.ShowtimesAdditions.AddAsync(
                         new ShowtimeAdditionEntity
                         {
-                            HallAddition = hallAddition,
-                            Showtime = showtime
+                            AdditionId = additionDto.Addition.Id,
+                            ShowtimeId = showtime.Id
                         }
                     );
                 }

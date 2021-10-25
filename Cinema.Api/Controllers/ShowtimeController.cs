@@ -17,20 +17,17 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet("cinemas")]
-        public IActionResult GetCinemasByMovieShowtimes(int movieId)
+        public IActionResult GetCinemasByMovieId(int movieId)
         {
-            return Ok(_showtimeService.GetCinemasByMovieShowtimes(movieId));
+            return Ok(_showtimeService.GetCinemasByMovieId(movieId));
         }
 
         [HttpPost]
         public async Task<IActionResult> AddShowtime(int movieId, ShowtimeDto showtimeDto)
         {
-            if (await _showtimeService.CanAddShowtimeAsync(movieId, showtimeDto))
-            {
-                await _showtimeService.AddShowtimeAsync(movieId, showtimeDto);
-                return Ok();
-            }
-            else
+            var canAddShowtime = await _showtimeService.CanAddShowtimeAsync(movieId, showtimeDto);
+
+            if (!canAddShowtime)
             {
                 return BadRequest(
                     new
@@ -39,6 +36,9 @@ namespace Cinema.Api.Controllers
                     }
                 );
             }
+
+            await _showtimeService.AddShowtimeAsync(movieId, showtimeDto);
+            return Ok();
         }
 
         [HttpDelete("{showtimeId:long}")]

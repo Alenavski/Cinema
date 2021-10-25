@@ -72,7 +72,30 @@ namespace Cinema.Services
                 .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             var hall = hallDto.Adapt<HallEntity>();
+
+            hall.Seats = null;
             cinema.Halls.Add(hall);
+
+            var seatTypes = await _context.SeatTypes.ToListAsync();
+            foreach (var seat in hallDto.Seats)
+            {
+                if (seat.Id == 0)
+                {
+                    var seatType = seatTypes.SingleOrDefault(st => st.Id == seat.SeatType.Id);
+                    await _context.Seats.AddAsync(
+                        new SeatEntity
+                        {
+                            Hall = hall,
+                            Index = seat.Index,
+                            Id = seat.Id,
+                            Place = seat.Place,
+                            Row = seat.Row,
+                            SeatType = seatType
+                        }
+                    );
+                }
+            }
+
             await _context.SaveChangesAsync();
             return hall.Id;
         }
