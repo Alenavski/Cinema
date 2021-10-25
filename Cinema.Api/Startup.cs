@@ -1,9 +1,12 @@
 using Cinema.Api.Tools;
 using Cinema.Api.Tools.Interfaces;
 using Cinema.DB.EF;
+using Cinema.DB.Entities;
 using Cinema.Services;
+using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Cinema.Services.Options;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -81,6 +84,12 @@ namespace Cinema.Api
                     );
                 }
             );
+
+            TypeAdapterConfig<ShowtimeAdditionEntity, AdditionDto>
+                .NewConfig()
+                .Map(dest => dest,
+                    src => src.Addition);
+                
 
             services.AddMvc()
                 .AddJsonOptions(

@@ -120,13 +120,13 @@ namespace Cinema.Services
             foreach (var additionDto in showtimeDto.Additions)
             {
                 var hallAddition = hallAdditions
-                    .SingleOrDefault(ha => ha.AdditionId == additionDto.Addition.Id);
+                    .SingleOrDefault(ha => ha.AdditionId == additionDto.Id);
                 if (hallAddition != null)
                 {
                     await _context.ShowtimesAdditions.AddAsync(
                         new ShowtimeAdditionEntity
                         {
-                            AdditionId = additionDto.Addition.Id,
+                            AdditionId = additionDto.Id,
                             ShowtimeId = showtime.Id
                         }
                     );

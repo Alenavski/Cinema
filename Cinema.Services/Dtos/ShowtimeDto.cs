@@ -16,12 +16,18 @@ namespace Cinema.Services.Dtos
         [Required]
         public HallDto Hall { get; set; }
         
-        public ICollection<ShowtimeAdditionDto> Additions { get; set; }
+        public ICollection<AdditionDto> Additions { get; set; }
         
         public ICollection<TicketPriceDto> Prices { get; set; }
 
-        public ShowtimeDto(long id, TimeSpan time, short numberOfFreeSeats, HallDto hall,
-            ICollection<TicketPriceDto> prices, ICollection<ShowtimeAdditionDto> additions)
+        public ShowtimeDto(
+            long id, 
+            TimeSpan time, 
+            short numberOfFreeSeats, 
+            HallDto hall,
+            ICollection<TicketPriceDto> prices, 
+            ICollection<AdditionDto> additions
+        )
         {
             Id = id;
             Time = time;

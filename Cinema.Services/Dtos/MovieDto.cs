@@ -30,8 +30,16 @@ namespace Cinema.Services.Dtos
         
         public ICollection<ShowtimeDto> Showtimes { get; set; }
 
-        public MovieDto(int id, string title, string description, DateTime startDate,
-            DateTime endDate, short minutesLength, byte[] poster, ICollection<ShowtimeDto> showtimes)
+        public MovieDto(
+            int id, 
+            string title, 
+            string description, 
+            DateTime startDate,
+            DateTime endDate, 
+            short minutesLength, 
+            byte[] poster, 
+            ICollection<ShowtimeDto> showtimes
+        )
         {
             Id = id;
             Title = title;
