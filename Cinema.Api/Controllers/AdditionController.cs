@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Cinema.Services.Constants;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Api.Controllers
@@ -23,6 +25,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAddition(int id)
         {
             var addition = await _additionService.GetAdditionByIdAsync(id);
@@ -42,6 +45,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAddition(AdditionDto additionDto)
         {
             return Ok(await _additionService.AddAdditionAsync(additionDto));

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Api.Controllers
@@ -25,6 +26,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddMovie([FromBody] MovieDto movieDto)
         {
             return Ok(await _movieService.AddMovieAsync(movieDto));
@@ -49,6 +51,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
             var movie = await _movieService.GetMovieByIdAsync(id);
@@ -68,6 +71,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDto movieDto)
         {
             var movie = await _movieService.GetMovieByIdAsync(id);
