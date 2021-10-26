@@ -17,9 +17,9 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet("cinemas")]
-        public IActionResult GetCinemasByMovieId(int movieId)
+        public async Task<IActionResult> GetCinemasByMovieId(int movieId)
         {
-            return Ok(_showtimeService.GetCinemasByMovieId(movieId));
+            return Ok(await _showtimeService.GetCinemasByMovieIdAsync(movieId));
         }
 
         [HttpPost]

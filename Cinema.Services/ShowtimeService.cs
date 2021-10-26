@@ -20,35 +20,14 @@ namespace Cinema.Services
             _context = context;
         }
 
-        public IEnumerable<CinemaDto> GetCinemasByMovieId(int movieId)
+        public async Task<IEnumerable<CinemaDto>> GetCinemasByMovieIdAsync(int movieId)
         {
-            var movieShowtimes = _context.Showtimes
-                .Include(sh => sh.Movie)
-                .Include(sh => sh.Hall)
-                .ThenInclude(h => h.Cinema)
-                .Where(sh => sh.Movie.Id == movieId);
-
-            var groupCinemasShowtimes = movieShowtimes
-                .AsEnumerable()
-                .GroupBy(sh => sh.Hall.Cinema);
-
-            var cinemasList = new List<CinemaDto>();
-            foreach (var cinemaShowtimes in groupCinemasShowtimes)
-            {
-                var cinemaDto = cinemaShowtimes.Key.Adapt<CinemaDto>();
-
-                var halls = cinemaDto.Halls.GroupJoin(
-                    cinemaShowtimes,
-                    hall => hall.Id,
-                    showtime => showtime.Hall.Id,
-                    (hall, showtime) => hall
-                ).ToList();
-
-                cinemaDto.Halls = halls;
-                cinemasList.Add(cinemaDto);
-            }
-            
-            return cinemasList;
+            return await _context.Cinemas
+                .Include(c => c.Halls.Where(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
+                .ThenInclude(h => h.Showtimes.Where(sh => sh.MovieId == movieId))
+                .Where(c => c.Halls.Any(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
+                .ProjectToType<CinemaDto>()
+                .ToListAsync();
         }
 
         public async Task<bool> CanAddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)
