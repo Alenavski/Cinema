@@ -87,8 +87,10 @@ namespace Cinema.Api
 
             TypeAdapterConfig<ShowtimeAdditionEntity, AdditionDto>
                 .NewConfig()
-                .Map(dest => dest,
-                    src => src.Addition);
+                .Map(
+                    dest => dest,
+                    src => src.Addition
+                );
                 
 
             services.AddMvc()

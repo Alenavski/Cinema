@@ -10,7 +10,7 @@ namespace Cinema.DB.Entities
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public short MinutesLength { get; set; }
+        public int MinutesLength { get; set; }
         public byte[] Poster { get; set; }
         public ICollection<ShowtimeEntity> Showtimes { get; set; }
     }

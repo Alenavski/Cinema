@@ -22,11 +22,13 @@ namespace Cinema.Services
 
         public IEnumerable<CinemaDto> GetCinemasByMovieId(int movieId)
         {
-            var groupCinemasShowtimes = _context.Showtimes
+            var movieShowtimes = _context.Showtimes
                 .Include(sh => sh.Movie)
                 .Include(sh => sh.Hall)
                 .ThenInclude(h => h.Cinema)
-                .Where(sh => sh.Movie.Id == movieId)
+                .Where(sh => sh.Movie.Id == movieId);
+
+            var groupCinemasShowtimes = movieShowtimes
                 .AsEnumerable()
                 .GroupBy(sh => sh.Hall.Cinema);
 
@@ -109,12 +111,7 @@ namespace Cinema.Services
         private async Task AddAdditionsForShowtimeAsync(ShowtimeDto showtimeDto)
         {
             var showtime = await _context.Showtimes.SingleOrDefaultAsync(sh => sh.Id == showtimeDto.Id);
-            /*var additions = _context.Additions
-                .Include(a => a.Halls)
-                .ThenInclude(ah => ah.Hall);*/
             var hallAdditions = await _context.HallsAdditions
-                //.Include(ha => ha.Hall)
-                //.Include(ha => ha.Addition)
                 .Where(ha => ha.HallId == showtime.Hall.Id)
                 .ToListAsync();
             foreach (var additionDto in showtimeDto.Additions)

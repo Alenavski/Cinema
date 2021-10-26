@@ -24,20 +24,20 @@ namespace Cinema.Services.Dtos
 
         [Required]
         [Range(0, 53280)]
-        public short MinutesLength { get; set; }
+        public int MinutesLength { get; set; }
 
         public byte[] Poster { get; set; }
         
         public ICollection<ShowtimeDto> Showtimes { get; set; }
 
         public MovieDto(
-            int id, 
-            string title, 
-            string description, 
+            int id,
+            string title,
+            string description,
             DateTime startDate,
-            DateTime endDate, 
-            short minutesLength, 
-            byte[] poster, 
+            DateTime endDate,
+            int minutesLength,
+            byte[] poster,
             ICollection<ShowtimeDto> showtimes
         )
         {
