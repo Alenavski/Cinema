@@ -8,6 +8,3 @@
     CONSTRAINT [FK_Showtimes_Halls] FOREIGN KEY ([HallId]) REFERENCES [dbo].[Halls] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_Showtimes_Movies] FOREIGN KEY ([MovieId]) REFERENCES [dbo].[Movies] ([Id]) ON DELETE CASCADE
 );
-
-
-

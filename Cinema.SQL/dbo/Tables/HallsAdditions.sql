@@ -6,4 +6,3 @@
     CONSTRAINT [FK_HallsServies_Halls] FOREIGN KEY ([HallId]) REFERENCES [dbo].[Halls] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_HallsServies_Services] FOREIGN KEY ([AdditionId]) REFERENCES [dbo].[Additions] ([Id]) ON DELETE CASCADE
 );
-

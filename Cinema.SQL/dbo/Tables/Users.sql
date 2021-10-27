@@ -10,4 +10,3 @@
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Users_Email]
     ON [dbo].[Users]([Email] ASC);
-
