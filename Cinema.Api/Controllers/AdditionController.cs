@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Cinema.Services.Constants;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
