@@ -28,6 +28,14 @@ namespace Cinema.Services
             return movieEntity.Id;
         }
 
+        public async Task<IEnumerable<MovieDto>> GetMoviesByTermAsync(string term)
+        {
+            return await _context.Movies
+                .Where(m => m.Title.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
+                .ProjectToType<MovieDto>()
+                .ToListAsync();
+        }
+
         public async Task<MovieDto> GetMovieByIdAsync(int id)
         {
             return await _context.Movies

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
@@ -51,6 +52,23 @@ namespace Cinema.Services
         {
             return await _context.Cinemas
                 .Include(c => c.Halls)
+                .ProjectToType<CinemaDto>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetCitiesByTermAsync(string term)
+        {
+            return await _context.Cinemas
+                .Where(c => c.City.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
+                .Select(c => c.City)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<CinemaDto>> GetCinemasByTermAsync(string term)
+        {
+            return await _context.Cinemas
+                .Where(c => c.Name.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
                 .ProjectToType<CinemaDto>()
                 .ToListAsync();
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,10 +25,18 @@ namespace Cinema.Api.Controllers
             return Ok(await _cinemaService.AddCinemaAsync(cinemaDto));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCinemas()
+        [HttpGet("cities")]
+        public async Task<IActionResult> GetCitiesByTerm([FromQuery] string term)
         {
-            return Ok(await _cinemaService.GetCinemasAsync());
+            return Ok(await _cinemaService.GetCitiesByTermAsync(term));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCinemas([FromQuery] string term)
+        {
+            return term != null 
+                ? Ok(await _cinemaService.GetCinemasByTermAsync(term)) 
+                : Ok(await _cinemaService.GetCinemasAsync());
         }
 
         [HttpGet("{id:int}")]
