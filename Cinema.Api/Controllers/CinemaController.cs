@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Api.Controllers
@@ -17,6 +18,7 @@ namespace Cinema.Api.Controllers
         }
         
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCinema([FromBody] CinemaDto cinemaDto)
         {
             return Ok(await _cinemaService.AddCinemaAsync(cinemaDto));
@@ -47,6 +49,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCinema(int id, [FromBody] CinemaDto cinemaDto)
         {
             var cinema = await _cinemaService.GetCinemaByIdAsync(id);
@@ -66,6 +69,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCinema(int id)
         {
             var cinema = await _cinemaService.GetCinemaByIdAsync(id);

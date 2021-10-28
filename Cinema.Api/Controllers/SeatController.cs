@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Api.Controllers
@@ -17,6 +18,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSeats([FromBody] SeatDto[] seatDtos)
         {
             await _seatService.DeleteSeatsAsync(seatDtos);
@@ -24,6 +26,7 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateSeats([FromBody] SeatDto[] seatDtos)
         {
             await _seatService.UpdateSeatsAsync(seatDtos);
