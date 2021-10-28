@@ -9,9 +9,8 @@ namespace Cinema.Services.Interfaces
         Task<int> AddCinemaAsync(CinemaDto cinemaDto);
         Task<CinemaDto> GetCinemaByIdAsync(int id);
         Task UpdateCinemaAsync(int id, CinemaDto cinemaDto);
-        Task<IEnumerable<CinemaDto>> GetCinemasAsync();
+        Task<IEnumerable<CinemaDto>> GetCinemasAsync(string term);
         Task DeleteCinemaAsync(int id);
-        Task<IEnumerable<CinemaDto>> GetCinemasByTermAsync(string term);
         Task<IEnumerable<string>> GetCitiesByTermAsync(string term);
     }
 }

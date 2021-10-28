@@ -28,14 +28,6 @@ namespace Cinema.Services
             return movieEntity.Id;
         }
 
-        public async Task<IEnumerable<MovieDto>> GetMoviesByTermAsync(string term)
-        {
-            return await _context.Movies
-                .Where(m => m.Title.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
-                .ProjectToType<MovieDto>()
-                .ToListAsync();
-        }
-
         public async Task<MovieDto> GetMovieByIdAsync(int id)
         {
             return await _context.Movies
@@ -65,8 +57,16 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<MovieDto> GetMoviesByFilter(ShowtimeFilterDto filter)
+        public async Task<IEnumerable<MovieDto>> GetMoviesByFilterAsync(ShowtimeFilterDto filter)
         {
+            if (filter.Term != null)
+            {
+                return await _context.Movies
+                    .Where(m => m.Title.StartsWith(filter.Term, StringComparison.OrdinalIgnoreCase))
+                    .ProjectToType<MovieDto>()
+                    .ToListAsync();
+            }
+            
             filter.StartTime ??= new TimeSpan(0, 0, 0);
             filter.EndTime ??= new TimeSpan(23, 59, 59);
             var showtimes = _context.Showtimes

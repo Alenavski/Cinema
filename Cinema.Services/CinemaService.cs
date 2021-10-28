@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,28 +49,25 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
+        public async Task<IEnumerable<CinemaDto>> GetCinemasAsync(string term)
         {
-            return await _context.Cinemas
-                .Include(c => c.Halls)
-                .ProjectToType<CinemaDto>()
-                .ToListAsync();
+            return term != null
+                ? await _context.Cinemas
+                    .Where(c => c.Name.StartsWith(term, StringComparison.OrdinalIgnoreCase))
+                    .ProjectToType<CinemaDto>()
+                    .ToListAsync()
+                : await _context.Cinemas
+                    .Include(c => c.Halls)
+                    .ProjectToType<CinemaDto>()
+                    .ToListAsync();
         }
 
         public async Task<IEnumerable<string>> GetCitiesByTermAsync(string term)
         {
             return await _context.Cinemas
-                .Where(c => c.City.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
+                .Where(c => c.City.StartsWith(term, StringComparison.OrdinalIgnoreCase))
                 .Select(c => c.City)
                 .Distinct()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<CinemaDto>> GetCinemasByTermAsync(string term)
-        {
-            return await _context.Cinemas
-                .Where(c => c.Name.Substring(0, term.Length).ToLower().Equals(term.ToLower()))
-                .ProjectToType<CinemaDto>()
                 .ToListAsync();
         }
 

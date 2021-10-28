@@ -34,9 +34,7 @@ namespace Cinema.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCinemas([FromQuery] string term)
         {
-            return term != null 
-                ? Ok(await _cinemaService.GetCinemasByTermAsync(term)) 
-                : Ok(await _cinemaService.GetCinemasAsync());
+            return Ok(await _cinemaService.GetCinemasAsync(term));
         }
 
         [HttpGet("{id:int}")]
