@@ -59,14 +59,6 @@ namespace Cinema.Services
 
         public async Task<IEnumerable<MovieDto>> GetMoviesByFilterAsync(ShowtimeFilterDto filter)
         {
-            if (filter.Term != null)
-            {
-                return await _context.Movies
-                    .Where(m => m.Title.StartsWith(filter.Term, StringComparison.OrdinalIgnoreCase))
-                    .ProjectToType<MovieDto>()
-                    .ToListAsync();
-            }
-            
             filter.StartTime ??= new TimeSpan(0, 0, 0);
             filter.EndTime ??= new TimeSpan(23, 59, 59);
             var showtimes = _context.Showtimes
@@ -74,6 +66,12 @@ namespace Cinema.Services
                 .ThenInclude(h => h.Cinema)
                 .Include(s => s.Movie)
                 .Where(s => s.Time >= filter.StartTime && s.Time <= filter.EndTime);
+            
+            if (filter.Term != null)
+            {
+                showtimes = showtimes
+                    .Where(s => s.Movie.Title.StartsWith(filter.Term, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (filter.City != null)
             {

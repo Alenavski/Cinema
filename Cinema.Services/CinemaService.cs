@@ -51,15 +51,11 @@ namespace Cinema.Services
 
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync(string term)
         {
-            return term != null
-                ? await _context.Cinemas
-                    .Where(c => c.Name.StartsWith(term, StringComparison.OrdinalIgnoreCase))
-                    .ProjectToType<CinemaDto>()
-                    .ToListAsync()
-                : await _context.Cinemas
-                    .Include(c => c.Halls)
-                    .ProjectToType<CinemaDto>()
-                    .ToListAsync();
+            return await _context.Cinemas
+                .Include(c => c.Halls)
+                .Where(c => term == null || c.Name.StartsWith(term, StringComparison.OrdinalIgnoreCase))
+                .ProjectToType<CinemaDto>()
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<string>> GetCitiesByTermAsync(string term)
