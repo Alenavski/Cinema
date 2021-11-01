@@ -53,7 +53,7 @@ namespace Cinema.Services
         {
             return await _context.Cinemas
                 .Include(c => c.Halls)
-                .Where(c => term == null || c.Name.StartsWith(term, StringComparison.OrdinalIgnoreCase))
+                .Where(c => term == null || c.Name.StartsWith(term))
                 .ProjectToType<CinemaDto>()
                 .ToListAsync();
         }
@@ -61,7 +61,7 @@ namespace Cinema.Services
         public async Task<IEnumerable<string>> GetCitiesByTermAsync(string term)
         {
             return await _context.Cinemas
-                .Where(c => c.City.StartsWith(term, StringComparison.OrdinalIgnoreCase))
+                .Where(c => c.City.StartsWith(term))
                 .Select(c => c.City)
                 .Distinct()
                 .ToListAsync();

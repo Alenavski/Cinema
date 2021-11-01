@@ -70,7 +70,7 @@ namespace Cinema.Services
             if (filter.Term != null)
             {
                 showtimes = showtimes
-                    .Where(s => s.Movie.Title.StartsWith(filter.Term, StringComparison.OrdinalIgnoreCase));
+                    .Where(s => s.Movie.Title.StartsWith(filter.Term));
             }
 
             if (filter.City != null)
