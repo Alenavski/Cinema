@@ -1,4 +1,6 @@
-﻿namespace Cinema.DB.Entities
+﻿using System.Collections.Generic;
+
+namespace Cinema.DB.Entities
 {
     public class UserEntity
     {
@@ -7,5 +9,6 @@
         public byte[] Password { get; set; }
         public byte[] Salt { get; set; }
         public string Role { get; set; }
+        public ICollection<TicketEntity> Tickets { get; set; }
     }
 }

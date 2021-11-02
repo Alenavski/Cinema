@@ -1,4 +1,6 @@
-﻿namespace Cinema.DB.Entities
+﻿using System.Collections.Generic;
+
+namespace Cinema.DB.Entities
 {
     public class SeatEntity
     {
@@ -8,5 +10,6 @@
         public byte Place { get; set; }
         public HallEntity Hall { get; set; }
         public SeatTypeEntity SeatType { get; set; }
+        public ICollection<TicketSeatEntity> Tickets { get; set; }
     }
 }

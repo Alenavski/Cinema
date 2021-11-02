@@ -73,6 +73,9 @@
     <Build Include="dbo\Tables\Additions.sql" />
     <Build Include="dbo\Tables\TicketsPrices.sql" />
     <Build Include="dbo\Tables\ShowtimesAdditions.sql" />
+    <Build Include="dbo\Tables\TicketsSeats.sql" />
+    <Build Include="dbo\Tables\TicketsAdditions.sql" />
+    <Build Include="dbo\Tables\Tickets.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cinema.SQL.sqlproj.user" />

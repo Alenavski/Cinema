@@ -13,5 +13,6 @@ namespace Cinema.DB.Entities
         public HallEntity Hall { get; set; }
         public ICollection<TicketPriceEntity> Prices { get; set; }
         public ICollection<ShowtimeAdditionEntity> Additions { get; set; }
+        public ICollection<TicketEntity> Tickets { get; set; }
     }
 }

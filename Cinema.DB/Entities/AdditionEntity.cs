@@ -8,5 +8,6 @@ namespace Cinema.DB.Entities
         public string Name { get; set; }
         public ICollection<HallAdditionEntity> Halls { get; set; }
         public ICollection<ShowtimeAdditionEntity> Showtimes { get; set; }
+        public ICollection<TicketAdditionEntity> Tickets { get; set; }
     }
 }

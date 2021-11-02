@@ -70,6 +70,7 @@ namespace Cinema.Api
             services.AddScoped<IAdditionService, AdditionService>();
             services.AddScoped<IHallAdditionService, HallAdditionService>();
             services.AddScoped<IShowtimeService, ShowtimeService>();
+            services.AddScoped<ITicketService, TicketService>();
 
             services.AddSwaggerGen(
                 c =>
@@ -86,6 +87,12 @@ namespace Cinema.Api
             );
 
             TypeAdapterConfig<ShowtimeAdditionEntity, AdditionDto>
+                .NewConfig()
+                .Map(
+                    dest => dest,
+                    src => src.Addition
+                );
+            TypeAdapterConfig<TicketAdditionEntity, AdditionDto>
                 .NewConfig()
                 .Map(
                     dest => dest,
