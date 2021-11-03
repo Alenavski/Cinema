@@ -23,8 +23,9 @@ namespace Cinema.Services
                 .SingleOrDefaultAsync(u => u.Id == userId);
             var showtime = await _context.Showtimes
                 .SingleOrDefaultAsync(sh => sh.Id == ticketDto.Showtime.Id);
-            var ticket = new TicketEntity()
+            var ticket = new TicketEntity
             {
+                Id = 0,
                 Showtime = showtime,
                 DateOfBooking = ticketDto.DateOfBooking,
                 User = user
@@ -34,12 +35,20 @@ namespace Cinema.Services
             return ticket.Id;
         }
 
+        public async Task UpdateDateOfBookingAsync(TicketDto ticketDto)
+        {
+            var ticket = await _context.Tickets
+                .SingleOrDefaultAsync(t => t.Id == ticketDto.Id);
+            ticket.DateOfBooking = ticketDto.DateOfBooking;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task AddAdditionsForTicketAsync(TicketDto ticketDto)
         {
             var ticket = await _context.Tickets
                 .SingleOrDefaultAsync(t => t.Id == ticketDto.Id);
             var showtimeAdditions = await _context.ShowtimesAdditions
-                .Where(sha => sha.ShowtimeId == ticket.Showtime.Id)
+                .Where(sha => sha.ShowtimeId == ticketDto.Showtime.Id)
                 .ToListAsync();
 
             foreach (var additionDto in ticketDto.Additions)
@@ -67,14 +76,23 @@ namespace Cinema.Services
                 .SingleOrDefaultAsync(t => t.Id == ticketId);
             var seat = await _context.Seats
                 .SingleOrDefaultAsync(s => s.Id == seatId);
-            await _context.TicketsSeats.AddAsync(
-                new TicketSeatEntity
-                {
-                    IsOrdered = isOrdered,
-                    Ticket = ticket,
-                    Seat = seat
-                }
-            );
+            var ticketSeat = await _context.TicketsSeats
+                .SingleOrDefaultAsync(ts => ts.SeatId == seatId && ts.TicketId == ticketId);
+            if (ticketSeat == null)
+            {
+                await _context.TicketsSeats.AddAsync(
+                    new TicketSeatEntity
+                    {
+                        IsOrdered = isOrdered,
+                        Ticket = ticket,
+                        Seat = seat
+                    }
+                );
+            }
+            else
+            {
+                ticketSeat.IsOrdered = true;
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -83,8 +101,11 @@ namespace Cinema.Services
         {
             var ticketSeat = await _context.TicketsSeats
                 .SingleOrDefaultAsync(ts => ts.SeatId == seatId && ts.TicketId == ticketId);
-            _context.Remove(ticketSeat);
-            await _context.SaveChangesAsync();
+            if (ticketSeat is { IsOrdered: false })
+            {
+                _context.Remove(ticketSeat);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteEmptyTicketAsync(long ticketId)
@@ -92,7 +113,7 @@ namespace Cinema.Services
             var ticket = await _context.Tickets
                 .Include(t => t.TicketsSeats)
                 .SingleOrDefaultAsync(t => t.Id == ticketId);
-            if (ticket.TicketsSeats.Count == 0)
+            if (ticket != null && ticket.TicketsSeats.Count == 0)
             {
                 _context.Remove(ticket);
                 await _context.SaveChangesAsync();

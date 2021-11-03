@@ -10,5 +10,6 @@ namespace Cinema.Services.Interfaces
         Task AddAdditionsForTicketAsync(TicketDto ticketDto);
         Task DeleteSeatTicketAsync(long seatId, long ticketId);
         Task DeleteEmptyTicketAsync(long ticketId);
+        Task UpdateDateOfBookingAsync(TicketDto ticketDto);
     }
 }

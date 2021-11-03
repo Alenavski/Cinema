@@ -8,5 +8,6 @@ namespace Cinema.Services.Interfaces
     {
         Task DeleteSeatsAsync(IEnumerable<SeatDto> seatDtos);
         Task UpdateSeatsAsync(IEnumerable<SeatDto> seatDtos);
+        Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId);
     }
 }

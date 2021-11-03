@@ -32,5 +32,11 @@ namespace Cinema.Api.Controllers
             await _seatService.UpdateSeatsAsync(seatDtos);
             return Ok();
         }
+
+        [HttpGet("showtime/{showtimeId:long}")]
+        public async Task<IActionResult> GetBlockedSeatsOfShowtime(long showtimeId)
+        {
+            return Ok(await _seatService.GetBlockedSeatOfShowtimeAsync(showtimeId));
+        }
     }
 }

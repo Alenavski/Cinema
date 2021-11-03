@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using Cinema.Api.Tools.Interfaces;
 using Cinema.Services.Dtos;
@@ -38,8 +37,8 @@ namespace Cinema.Api.Controllers
             return Ok(ticketId);
         }
 
-        [HttpPost("{ticketId:long}/seats/{seatId:long}")]
-        //[Authorize(Roles = "User")]
+        [HttpPost("{ticketId:long}/seats/{seatId:long}")] 
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> BlockSeat(long seatId, long ticketId)
         {
             await _ticketService.AddSeatForTicketAsync(ticketId, seatId, false);
@@ -49,15 +48,37 @@ namespace Cinema.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("{ticketId:long}/seats/{seatId:long}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> UnblockSeat(long seatId, long ticketId)
+        {
+            await _ticketService.DeleteSeatTicketAsync(seatId, ticketId);
+            return Ok();
+        }
+
         [HttpPut]
         public async Task<IActionResult> ApplyTicket([FromBody] TicketDto ticketDto)
         {
+            await _ticketService.UpdateDateOfBookingAsync(ticketDto);
+
+            if (ticketDto.TicketSeats == null)
+            {
+                return BadRequest(
+                    new
+                    {
+                        message = "Please, choose seat for ticket"
+                    }
+                );
+            }
             foreach (var ticketSeatDto in ticketDto.TicketSeats)
             {
                 await _ticketService.AddSeatForTicketAsync(ticketDto.Id, ticketSeatDto.Seat.Id, true);
             }
 
-            await _ticketService.AddAdditionsForTicketAsync(ticketDto);
+            if (ticketDto.Additions != null)
+            {
+                await _ticketService.AddAdditionsForTicketAsync(ticketDto);
+            }
             return Ok();
         }
     }

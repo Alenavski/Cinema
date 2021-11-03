@@ -43,5 +43,17 @@ namespace Cinema.Services
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId)
+        {
+            var seats = await _context.Seats
+                .Include(s => s.Tickets.Where(st => st.Ticket.Showtime.Id == showtimeId))
+                .ThenInclude(st => st.Ticket)
+                .ThenInclude(t => t.Showtime)
+                .Where(s => s.Tickets.Any(st => st.Ticket.Showtime.Id == showtimeId))
+                .ProjectToType<SeatDto>()
+                .ToListAsync();
+            return seats;
+        }
     }
 }
