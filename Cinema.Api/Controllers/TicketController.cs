@@ -1,4 +1,10 @@
-﻿using Cinema.Services.Interfaces;
+﻿using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+using Cinema.Api.Tools.Interfaces;
+using Cinema.Services.Dtos;
+using Cinema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Api.Controllers
@@ -8,10 +14,51 @@ namespace Cinema.Api.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
+        private readonly IBackgroundTaskService _backgroundTaskService;
 
-        public TicketController(ITicketService ticketService)
+        public TicketController(ITicketService ticketService, IBackgroundTaskService backgroundTaskService)
         {
             _ticketService = ticketService;
+            _backgroundTaskService = backgroundTaskService;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> AddTicket([FromBody] TicketDto ticketDto)
+        {
+            var userClaim = User.FindFirst(ClaimTypes.Sid);
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var ticketId = await _ticketService.AddTicketAsync(int.Parse(userClaim.Value), ticketDto);
+            _backgroundTaskService.DeleteEmptyTicketWithDelay(ticketId, 30);
+
+            return Ok(ticketId);
+        }
+
+        [HttpPost("{ticketId:long}/seats/{seatId:long}")]
+        //[Authorize(Roles = "User")]
+        public async Task<IActionResult> BlockSeat(long seatId, long ticketId)
+        {
+            await _ticketService.AddSeatForTicketAsync(ticketId, seatId, false);
+
+            _backgroundTaskService.UnblockSeatWithDelay(seatId, ticketId, 15);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> ApplyTicket([FromBody] TicketDto ticketDto)
+        {
+            foreach (var ticketSeatDto in ticketDto.TicketSeats)
+            {
+                await _ticketService.AddSeatForTicketAsync(ticketDto.Id, ticketSeatDto.Seat.Id, true);
+            }
+
+            await _ticketService.AddAdditionsForTicketAsync(ticketDto);
+            return Ok();
         }
     }
 }

@@ -72,6 +72,8 @@ namespace Cinema.Api
             services.AddScoped<IShowtimeService, ShowtimeService>();
             services.AddScoped<ITicketService, TicketService>();
 
+            services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
+
             services.AddSwaggerGen(
                 c =>
                 {
