@@ -106,16 +106,20 @@ namespace Cinema.Services
                     .Where(s => s.Hall.Cinema.Name == filter.CinemaName);
             }
 
-            var movies = showtimes.AsEnumerable().GroupBy(s => s.Movie);
-            var movieEntities = new List<MovieEntity>();
-            foreach (var movie in movies)
+            var resultDtos = await showtimes
+               .ProjectToType<ShowtimeFilterResultDto>()
+               .ToListAsync();
+
+            var movieShowtimes = resultDtos.GroupBy(result => result.Movie);
+            var movies = new List<MovieDto>();
+            foreach (var movieShowtime in movieShowtimes)
             {
-                movie.Key.Showtimes.Clear();
-                movie.Key.Showtimes = movie.ToList();
-                movieEntities.Add(movie.Key);
+                movieShowtime.Key.Showtimes.Clear();
+                movieShowtime.Key.Showtimes = movieShowtime.Adapt<ShowtimeDto[]>();
+                movies.Add(movieShowtime.Key);
             }
 
-            return movieEntities.Adapt<MovieDto[]>();
+            return movies;
         }
     }
 }
