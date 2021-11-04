@@ -13,12 +13,10 @@ namespace Cinema.Api.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
-        private readonly IBackgroundTaskService _backgroundTaskService;
 
-        public TicketController(ITicketService ticketService, IBackgroundTaskService backgroundTaskService)
+        public TicketController(ITicketService ticketService)
         {
             _ticketService = ticketService;
-            _backgroundTaskService = backgroundTaskService;
         }
 
         [HttpPost]
@@ -32,7 +30,6 @@ namespace Cinema.Api.Controllers
             }
 
             var ticketId = await _ticketService.AddTicketAsync(int.Parse(userClaim.Value), ticketDto);
-            _backgroundTaskService.DeleteEmptyTicketWithDelay(ticketId, 30);
 
             return Ok(ticketId);
         }
@@ -42,8 +39,6 @@ namespace Cinema.Api.Controllers
         public async Task<IActionResult> BlockSeat(long seatId, long ticketId)
         {
             await _ticketService.AddSeatForTicketAsync(ticketId, seatId, false);
-
-            _backgroundTaskService.UnblockSeatWithDelay(seatId, ticketId, 15);
 
             return Ok();
         }
