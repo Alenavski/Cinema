@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
@@ -44,13 +45,13 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId)
+        public async Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId, DateTime dateOfShowtime)
         {
-            var seats = await _context.Seats
-                .Include(s => s.Tickets.Where(st => st.Ticket.Showtime.Id == showtimeId))
-                .ThenInclude(st => st.Ticket)
-                .ThenInclude(t => t.Showtime)
-                .Where(s => s.Tickets.Any(st => st.Ticket.Showtime.Id == showtimeId))
+            var seats = await _context.Tickets
+                .Where(ticket => ticket.ShowtimeDate.ShowtimeId == showtimeId && ticket.ShowtimeDate.Date == dateOfShowtime)
+                .SelectMany(ticket => ticket.TicketsSeats)
+                .Where(ts => ts.IsOrdered || (DateTime.Now - ts.BlockingTime).TotalMinutes < 15)
+                .Select(ts => ts.Seat)
                 .ProjectToType<SeatDto>()
                 .ToListAsync();
             return seats;

@@ -19,6 +19,7 @@ namespace Cinema.DB.EF
         public DbSet<TicketEntity> Tickets { get; set; }
         public DbSet<TicketAdditionEntity> TicketsAdditions { get; set; }
         public DbSet<TicketSeatEntity> TicketsSeats { get; set; }
+        public DbSet<ShowtimeDateEntity> ShowtimesDates { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {

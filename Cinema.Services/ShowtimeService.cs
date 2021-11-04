@@ -76,7 +76,6 @@ namespace Cinema.Services
                 Hall = hall,
                 Id = 0,
                 Movie = movie,
-                NumberOfFreeSeats = (short)hall.Seats.Count,
                 Time = showtimeDto.Time
             };
             await _context.Showtimes.AddAsync(showtime);

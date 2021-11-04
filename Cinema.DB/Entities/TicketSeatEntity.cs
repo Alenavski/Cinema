@@ -1,4 +1,6 @@
-﻿namespace Cinema.DB.Entities
+﻿using System;
+
+namespace Cinema.DB.Entities
 {
     public class TicketSeatEntity
     {
@@ -7,5 +9,7 @@
         public long SeatId { get; set; }
         public SeatEntity Seat { get; set; }
         public bool IsOrdered { get; set; }
+
+        public DateTime BlockingTime { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -34,9 +35,9 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet("showtime/{showtimeId:long}")]
-        public async Task<IActionResult> GetBlockedSeatsOfShowtime(long showtimeId)
+        public async Task<IActionResult> GetBlockedSeatsOfShowtime(long showtimeId, [FromQuery] DateTime dateOfShowtime)
         {
-            return Ok(await _seatService.GetBlockedSeatOfShowtimeAsync(showtimeId));
+            return Ok(await _seatService.GetBlockedSeatOfShowtimeAsync(showtimeId, dateOfShowtime));
         }
     }
 }

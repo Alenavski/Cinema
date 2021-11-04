@@ -7,6 +7,7 @@ namespace Cinema.Services.Dtos
     {
         public long Id { get; set; }
         public DateTime DateOfBooking { get; set; }
+        public DateTime Date { get; set; }
         public ShowtimeDto Showtime { get; set; }
         public ICollection<AdditionDto> Additions { get; set; }
         public ICollection<TicketSeatDto> TicketSeats { get; set; }

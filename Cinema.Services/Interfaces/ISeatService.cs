@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 
@@ -8,6 +9,6 @@ namespace Cinema.Services.Interfaces
     {
         Task DeleteSeatsAsync(IEnumerable<SeatDto> seatDtos);
         Task UpdateSeatsAsync(IEnumerable<SeatDto> seatDtos);
-        Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId);
+        Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId, DateTime dateOfShowtime);
     }
 }

@@ -21,12 +21,14 @@ namespace Cinema.Services
         {
             var user = await _context.Users
                 .SingleOrDefaultAsync(u => u.Id == userId);
-            var showtime = await _context.Showtimes
-                .SingleOrDefaultAsync(sh => sh.Id == ticketDto.Showtime.Id);
+
+            var showtimeDate = await _context.ShowtimesDates
+                .SingleOrDefaultAsync(sh => sh.ShowtimeId == ticketDto.Showtime.Id && sh.Date == ticketDto.Date);
+
             var ticket = new TicketEntity
             {
                 Id = 0,
-                Showtime = showtime,
+                ShowtimeDate = showtimeDate,
                 DateOfBooking = ticketDto.DateOfBooking,
                 User = user
             };
