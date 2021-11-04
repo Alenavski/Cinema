@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Cinema.DB.Entities
+﻿namespace Cinema.DB.Entities
 {
     public class SeatEntity
     {
@@ -10,6 +8,5 @@ namespace Cinema.DB.Entities
         public byte Place { get; set; }
         public HallEntity Hall { get; set; }
         public SeatTypeEntity SeatType { get; set; }
-        public ICollection<TicketSeatEntity> Tickets { get; set; }
     }
 }
