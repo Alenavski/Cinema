@@ -30,6 +30,7 @@ namespace Cinema.Services
                 Id = 0,
                 ShowtimeDate = showtimeDate,
                 DateOfBooking = ticketDto.DateOfBooking,
+                DateOfShowtime = ticketDto.DateOfShowtime,
                 User = user
             };
             await _context.Tickets.AddAsync(ticket);
@@ -75,6 +76,7 @@ namespace Cinema.Services
         public async Task AddSeatForTicketAsync(long ticketId, long seatId, bool isOrdered)
         {
             var ticket = await _context.Tickets
+                .Include(t => t.Showtime)
                 .SingleOrDefaultAsync(t => t.Id == ticketId);
             var seat = await _context.Seats
                 .SingleOrDefaultAsync(s => s.Id == seatId);
@@ -96,15 +98,24 @@ namespace Cinema.Services
                 ticketSeat.IsOrdered = true;
             }
 
+            var showtime = await _context.Showtimes
+                .SingleOrDefaultAsync(s => s.Id == ticket.Showtime.Id);
+            showtime.NumberOfFreeSeats -= 1;
+
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteSeatTicketAsync(long seatId, long ticketId)
         {
             var ticketSeat = await _context.TicketsSeats
+                .Include(ts => ts.Ticket)
+                .ThenInclude(t => t.Showtime)
                 .SingleOrDefaultAsync(ts => ts.SeatId == seatId && ts.TicketId == ticketId);
             if (ticketSeat is { IsOrdered: false })
             {
+                var showtime = await _context.Showtimes
+                    .SingleOrDefaultAsync(sh => sh.Id == ticketSeat.Ticket.Showtime.Id);
+                showtime.NumberOfFreeSeats += 1;
                 _context.Remove(ticketSeat);
                 await _context.SaveChangesAsync();
             }
