@@ -21,5 +21,8 @@ namespace Cinema.Services.Dtos
         public TimeSpan? EndTime { get; set; }
 
         public int NumberOfFreeSeats { get; set; }
+        
+        [MaxLength(150)]
+        public string Term { get; set; }
     }
 }

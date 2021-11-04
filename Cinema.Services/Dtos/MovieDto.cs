@@ -27,8 +27,13 @@ namespace Cinema.Services.Dtos
         public int MinutesLength { get; set; }
 
         public byte[] Poster { get; set; }
-        
+
         public ICollection<ShowtimeDto> Showtimes { get; set; }
+
+        public MovieDto()
+        {
+
+        }
 
         public MovieDto(
             int id,
@@ -49,6 +54,21 @@ namespace Cinema.Services.Dtos
             MinutesLength = minutesLength;
             Poster = poster;
             Showtimes = showtimes;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as MovieDto;
+            if (other == null)
+            {
+                return false;
+            }
+            return this.Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return (Id.GetHashCode());
         }
     }
 }

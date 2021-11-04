@@ -18,10 +18,9 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetMoviesWithShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
+        public async Task<IActionResult> GetMoviesWithShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
         {
-            var movies = _movieService.GetMoviesByFilter(showtimeFilterDto);
-            return Ok(movies);
+            return Ok(await _movieService.GetMoviesByFilterAsync(showtimeFilterDto));
         }
 
         [HttpPost]
