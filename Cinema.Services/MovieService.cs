@@ -110,14 +110,22 @@ namespace Cinema.Services
                .ProjectToType<ShowtimeFilterResultDto>()
                .ToListAsync();
 
-            var movieShowtimes = resultDtos.GroupBy(result => result.Movie);
-            var movies = new List<MovieDto>();
-            foreach (var movieShowtime in movieShowtimes)
-            {
-                movieShowtime.Key.Showtimes.Clear();
-                movieShowtime.Key.Showtimes = movieShowtime.Adapt<ShowtimeDto[]>();
-                movies.Add(movieShowtime.Key);
-            }
+            var movies = resultDtos
+                .GroupBy(result => result.Movie)
+                .Select(
+                    g =>
+                        new MovieDto()
+                        {
+                            Id = g.Key.Id,
+                            Title = g.Key.Title,
+                            Poster = g.Key.Poster,
+                            Description = g.Key.Description,
+                            Showtimes = g.Adapt<ShowtimeDto[]>(),
+                            StartDate = g.Key.StartDate,
+                            EndDate = g.Key.EndDate,
+                            MinutesLength = g.Key.MinutesLength
+                        }
+                );
 
             return movies;
         }

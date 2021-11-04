@@ -30,6 +30,11 @@ namespace Cinema.Services.Dtos
 
         public ICollection<ShowtimeDto> Showtimes { get; set; }
 
+        public MovieDto()
+        {
+
+        }
+
         public MovieDto(
             int id,
             string title,
