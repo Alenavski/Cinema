@@ -33,10 +33,10 @@ namespace Cinema.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("showtime/{showtimeId:long}")]
-        public async Task<IActionResult> GetBlockedSeatsOfShowtime(long showtimeId)
+        [HttpGet("showtime/{ticketId:long}")]
+        public async Task<IActionResult> GetBlockedSeatsOfTicketShowtime(long ticketId)
         {
-            return Ok(await _seatService.GetBlockedSeatOfShowtimeAsync(showtimeId));
+            return Ok(await _seatService.GetBlockedSeatOfTicketShowtimeAsync(ticketId));
         }
     }
 }
