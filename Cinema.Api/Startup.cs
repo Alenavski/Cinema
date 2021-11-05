@@ -98,7 +98,16 @@ namespace Cinema.Api
                     dest => dest,
                     src => src.Addition
                 );
-                
+            TypeAdapterConfig<TicketEntity, TicketDto>
+                .NewConfig()
+                .Map(
+                    dest => dest.DateOfShowtime,
+                    src => src.ShowtimeDate.Date
+                )
+                .Map(
+                    dest => dest.Showtime,
+                    src => src.ShowtimeDate.Showtime
+                );
 
             services.AddMvc()
                 .AddJsonOptions(

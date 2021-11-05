@@ -19,6 +19,32 @@ namespace Cinema.Api.Controllers
             _ticketService = ticketService;
         }
 
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetTickets()
+        {
+            var userClaim = User.FindFirst(ClaimTypes.Sid);
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(await _ticketService.GetTickets(int.Parse(userClaim.Value)));
+        }
+
+        [HttpGet("movies")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetTicketMovies()
+        {
+            var userClaim = User.FindFirst(ClaimTypes.Sid);
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(await _ticketService.GetTicketMovies(int.Parse(userClaim.Value)));
+        }
+
         [HttpPost]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> AddTicket([FromBody] TicketDto ticketDto)
@@ -56,7 +82,7 @@ namespace Cinema.Api.Controllers
         {
             await _ticketService.UpdateDateOfBookingAsync(ticketDto);
 
-            if (ticketDto.TicketSeats == null)
+            if (ticketDto.TicketsSeats == null)
             {
                 return BadRequest(
                     new
@@ -65,7 +91,7 @@ namespace Cinema.Api.Controllers
                     }
                 );
             }
-            foreach (var ticketSeatDto in ticketDto.TicketSeats)
+            foreach (var ticketSeatDto in ticketDto.TicketsSeats)
             {
                 await _ticketService.AddSeatForTicketAsync(ticketDto.Id, ticketSeatDto.Seat.Id, true);
             }

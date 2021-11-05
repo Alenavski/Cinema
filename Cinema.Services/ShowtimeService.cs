@@ -80,7 +80,20 @@ namespace Cinema.Services
             };
             await _context.Showtimes.AddAsync(showtime);
             await _context.SaveChangesAsync();
+
             showtimeDto.Id = showtime.Id;
+
+            for (int i = 0; i < (movie.EndDate - movie.StartDate).Days; i++)
+            {
+                var showtimeDate = new ShowtimeDateEntity()
+                {
+                    ShowtimeId = showtime.Id,
+                    Date = movie.StartDate + new TimeSpan(1,0,0,0)
+                };
+
+                await _context.ShowtimesDates.AddAsync(showtimeDate);
+                await _context.SaveChangesAsync();
+            }
 
             await AddPricesForSeatTypesAsync(showtimeDto);
             await AddAdditionsForShowtimeAsync(showtimeDto);

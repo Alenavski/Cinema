@@ -45,12 +45,22 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long showtimeId, DateTime dateOfShowtime)
+        public async Task<IEnumerable<SeatDto>> GetBlockedSeatOfShowtimeAsync(long ticketId)
         {
+            var ticket = await _context.Tickets.Include(t => t.ShowtimeDate)
+                .SingleOrDefaultAsync(t => t.Id == ticketId);
+
+            var currentTime = DateTime.Now.Subtract(new TimeSpan(0, 15, 0));
+
             var seats = await _context.Tickets
-                .Where(ticket => ticket.ShowtimeDate.ShowtimeId == showtimeId && ticket.ShowtimeDate.Date == dateOfShowtime)
-                .SelectMany(ticket => ticket.TicketsSeats)
-                .Where(ts => ts.IsOrdered || (DateTime.Now - ts.BlockingTime).TotalMinutes < 15)
+                .Include(t => t.ShowtimeDate)
+                .Include(t => t.TicketsSeats)
+                .ThenInclude(ts => ts.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .Where(t => t.ShowtimeDate.ShowtimeId == ticket.ShowtimeDate.ShowtimeId
+                            && t.ShowtimeDate.Date == ticket.ShowtimeDate.Date)
+                .SelectMany(t => t.TicketsSeats)
+                .Where(ts => ts.IsOrdered || currentTime < ts.BlockingTime)
                 .Select(ts => ts.Seat)
                 .ProjectToType<SeatDto>()
                 .ToListAsync();

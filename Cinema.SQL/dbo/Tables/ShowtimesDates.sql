@@ -1,8 +1,10 @@
 ﻿CREATE TABLE [dbo].[ShowtimesDates] (
-    [id]         BIGINT        NOT NULL,
+    [id]         BIGINT        IDENTITY (1, 1) NOT NULL,
     [showtimeId] BIGINT        NOT NULL,
     [Date]       DATETIME2 (7) NOT NULL,
     CONSTRAINT [PK_ShowtimeDate] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_ShowtimeDate_ShowtimeDate] FOREIGN KEY ([showtimeId]) REFERENCES [dbo].[Showtimes] ([Id])
 );
+
+
 
