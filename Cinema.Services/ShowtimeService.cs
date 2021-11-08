@@ -23,8 +23,15 @@ namespace Cinema.Services
         public async Task<IEnumerable<CinemaDto>> GetCinemasByMovieIdAsync(int movieId)
         {
             return await _context.Cinemas
-                .Include(c => c.Halls.Where(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
+                .Include(c => c.Halls)
                 .ThenInclude(h => h.Showtimes.Where(sh => sh.MovieId == movieId))
+                .ThenInclude(sh => sh.Additions)
+                .Include(c => c.Halls)
+                .ThenInclude(h => h.Showtimes.Where(sh => sh.MovieId == movieId))
+                .ThenInclude(sh => sh.Prices)
+                .ThenInclude(p => p.SeatType)
+                .Include(c => c.Halls.Where(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
+                .ThenInclude(h => h.Seats)
                 .Where(c => c.Halls.Any(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
                 .ProjectToType<CinemaDto>()
                 .ToListAsync();

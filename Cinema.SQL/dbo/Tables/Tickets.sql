@@ -7,8 +7,3 @@
     CONSTRAINT [FK_Tickets_Showtimes] FOREIGN KEY ([ShowtimeDateId]) REFERENCES [dbo].[ShowtimesDates] ([id]),
     CONSTRAINT [FK_Tickets_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id]) ON DELETE CASCADE
 );
-
-
-
-
-

@@ -57,7 +57,7 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<MovieDto> GetMoviesByFilter(ShowtimeFilterDto filter)
+        public async Task<IEnumerable<MovieDto>> GetMoviesByFilterAsync(ShowtimeFilterDto filter)
         {
             filter.StartTime ??= new TimeSpan(0, 0, 0);
             filter.EndTime ??= new TimeSpan(23, 59, 59);
@@ -66,6 +66,12 @@ namespace Cinema.Services
                 .ThenInclude(h => h.Cinema)
                 .Include(s => s.Movie)
                 .Where(s => s.Time >= filter.StartTime && s.Time <= filter.EndTime);
+            
+            if (filter.Term != null)
+            {
+                showtimes = showtimes
+                    .Where(s => s.Movie.Title.StartsWith(filter.Term));
+            }
 
             if (filter.City != null)
             {
@@ -108,16 +114,28 @@ namespace Cinema.Services
                     .Where(s => s.Hall.Cinema.Name == filter.CinemaName);
             }
 
-            var movies = showtimes.AsEnumerable().GroupBy(s => s.Movie);
-            var movieEntities = new List<MovieEntity>();
-            foreach (var movie in movies)
-            {
-                movie.Key.Showtimes.Clear();
-                movie.Key.Showtimes = movie.ToList();
-                movieEntities.Add(movie.Key);
-            }
+            var resultDtos = await showtimes
+               .ProjectToType<ShowtimeFilterResultDto>()
+               .ToListAsync();
 
-            return movieEntities.Adapt<MovieDto[]>();
+            var movies = resultDtos
+                .GroupBy(result => result.Movie)
+                .Select(
+                    g =>
+                        new MovieDto()
+                        {
+                            Id = g.Key.Id,
+                            Title = g.Key.Title,
+                            Poster = g.Key.Poster,
+                            Description = g.Key.Description,
+                            Showtimes = g.Adapt<ShowtimeDto[]>(),
+                            StartDate = g.Key.StartDate,
+                            EndDate = g.Key.EndDate,
+                            MinutesLength = g.Key.MinutesLength
+                        }
+                );
+
+            return movies;
         }
     }
 }
