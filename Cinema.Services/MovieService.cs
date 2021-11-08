@@ -91,7 +91,15 @@ namespace Cinema.Services
             if (filter.NumberOfFreeSeats != 0)
             {
                 showtimes = showtimes
-                    .Where(s => s.NumberOfFreeSeats >= filter.NumberOfFreeSeats);
+                    .Where(
+                        sh =>
+                            sh.Dates
+                                .Select(date =>
+                                    date.Tickets
+                                        .Select(ticket => ticket.TicketsSeats)
+                                        .Count()
+                                    ).Any(count => sh.Hall.Seats.Count - count >= filter.NumberOfFreeSeats)
+                            );
             }
 
             if (filter.MovieTitle != null)
