@@ -90,12 +90,12 @@ namespace Cinema.Services
 
             showtimeDto.Id = showtime.Id;
 
-            for (int i = 0; i < (movie.EndDate - movie.StartDate).Days; i++)
+            for (int i = 0; i <= (movie.EndDate - movie.StartDate).Days; i++)
             {
                 var showtimeDate = new ShowtimeDateEntity()
                 {
                     ShowtimeId = showtime.Id,
-                    Date = movie.StartDate + new TimeSpan(1,0,0,0)
+                    Date = movie.StartDate + new TimeSpan(i,0,0,0)
                 };
 
                 await _context.ShowtimesDates.AddAsync(showtimeDate);

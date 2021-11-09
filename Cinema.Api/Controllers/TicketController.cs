@@ -96,7 +96,7 @@ namespace Cinema.Api.Controllers
                 await _ticketService.AddSeatForTicketAsync(ticketDto.Id, ticketSeatDto.Seat.Id, true);
             }
 
-            if (ticketDto.Additions != null)
+            if (ticketDto.TicketsAdditions != null)
             {
                 await _ticketService.AddAdditionsForTicketAsync(ticketDto);
             }

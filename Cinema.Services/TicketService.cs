@@ -26,10 +26,6 @@ namespace Cinema.Services
                 .Include(t => t.User)
                 .Include(t => t.ShowtimeDate)
                 .ThenInclude(shDate => shDate.Showtime)
-                .ThenInclude(sh => sh.Hall)
-                .ThenInclude(h => h.Cinema)
-                .Include(t => t.ShowtimeDate)
-                .ThenInclude(shDate => shDate.Showtime)
                 .ThenInclude(sh => sh.Prices)
                 .Include(t => t.TicketsAdditions)
                 .ThenInclude(ta => ta.Addition)
@@ -97,7 +93,7 @@ namespace Cinema.Services
                 .Where(sha => sha.ShowtimeId == ticketDto.Showtime.Id)
                 .ToListAsync();
 
-            foreach (var additionDto in ticketDto.Additions)
+            foreach (var additionDto in ticketDto.TicketsAdditions)
             {
                 var showtimeAddition = showtimeAdditions
                     .SingleOrDefault(sha => sha.AdditionId == additionDto.Id);

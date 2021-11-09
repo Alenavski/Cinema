@@ -9,7 +9,7 @@ namespace Cinema.Services.Dtos
         public DateTime DateOfBooking { get; set; }
         public ShowtimeDto Showtime { get; set; }
         public DateTime DateOfShowtime { get; set; }
-        public ICollection<AdditionDto> Additions { get; set; }
+        public ICollection<AdditionDto> TicketsAdditions { get; set; }
         public ICollection<TicketSeatDto> TicketsSeats { get; set; }
 
         public TicketDto()
@@ -21,7 +21,7 @@ namespace Cinema.Services.Dtos
             long id,
             DateTime dateOfBooking,
             ShowtimeDto showtime,
-            ICollection<AdditionDto> additions,
+            ICollection<AdditionDto> ticketsAdditions,
             ICollection<TicketSeatDto> ticketsSeats,
             DateTime dateOfShowtime
         )
@@ -29,7 +29,7 @@ namespace Cinema.Services.Dtos
             Id = id;
             DateOfBooking = dateOfBooking;
             Showtime = showtime;
-            Additions = additions;
+            TicketsAdditions = ticketsAdditions;
             TicketsSeats = ticketsSeats;
             DateOfShowtime = dateOfShowtime;
         }
