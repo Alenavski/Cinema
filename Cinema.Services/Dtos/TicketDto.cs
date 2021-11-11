@@ -7,26 +7,30 @@ namespace Cinema.Services.Dtos
     {
         public long Id { get; set; }
         public DateTime DateOfBooking { get; set; }
-        public DateTime Date { get; set; }
         public ShowtimeDto Showtime { get; set; }
         public DateTime DateOfShowtime { get; set; }
-        public ICollection<AdditionDto> Additions { get; set; }
-        public ICollection<TicketSeatDto> TicketSeats { get; set; }
+        public ICollection<AdditionDto> TicketsAdditions { get; set; }
+        public ICollection<TicketSeatDto> TicketsSeats { get; set; }
+
+        public TicketDto()
+        {
+
+        }
 
         public TicketDto(
             long id,
             DateTime dateOfBooking,
             ShowtimeDto showtime,
-            ICollection<AdditionDto> additions,
-            ICollection<TicketSeatDto> ticketSeats,
+            ICollection<AdditionDto> ticketsAdditions,
+            ICollection<TicketSeatDto> ticketsSeats,
             DateTime dateOfShowtime
         )
         {
             Id = id;
             DateOfBooking = dateOfBooking;
             Showtime = showtime;
-            Additions = additions;
-            TicketSeats = ticketSeats;
+            TicketsAdditions = ticketsAdditions;
+            TicketsSeats = ticketsSeats;
             DateOfShowtime = dateOfShowtime;
         }
     }

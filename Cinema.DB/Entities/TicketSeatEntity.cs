@@ -9,7 +9,6 @@ namespace Cinema.DB.Entities
         public long SeatId { get; set; }
         public SeatEntity Seat { get; set; }
         public bool IsOrdered { get; set; }
-
         public DateTime BlockingTime { get; set; }
     }
 }

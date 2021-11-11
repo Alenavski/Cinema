@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cinema.DB.EF;
 using Cinema.DB.Entities;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Services
@@ -17,13 +20,50 @@ namespace Cinema.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<TicketDto>> GetTickets(int userId)
+        {
+            var tickets = await _context.Tickets
+                .Include(t => t.User)
+                .Include(t => t.ShowtimeDate)
+                .ThenInclude(shDate => shDate.Showtime)
+                .ThenInclude(sh => sh.Prices)
+                .Include(t => t.TicketsAdditions)
+                .ThenInclude(ta => ta.Addition)
+                .Include(t => t.TicketsSeats)
+                .ThenInclude(ts => ts.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .Where(t => t.User.Id == userId)
+                .ProjectToType<TicketDto>()
+                .ToListAsync();
+
+            return tickets;
+        }
+
+        public async Task<IEnumerable<TicketMovieDto>> GetTicketMovies(int userId)
+        {
+            var ticketMovies = await _context.Tickets
+                .Include(t => t.User)
+                .Include(t => t.ShowtimeDate)
+                .ThenInclude(sd => sd.Showtime)
+                .ThenInclude(s => s.Movie)
+                .Where(t => t.User.Id == userId)
+                .Select(t => new
+                {
+                    Movie = t.ShowtimeDate.Showtime.Movie,
+                    Ticket = t
+                })
+                .ToListAsync();
+
+            return ticketMovies.Adapt<TicketMovieDto[]>();
+        }
+
         public async Task<long> AddTicketAsync(int userId, TicketDto ticketDto)
         {
             var user = await _context.Users
                 .SingleOrDefaultAsync(u => u.Id == userId);
 
             var showtimeDate = await _context.ShowtimesDates
-                .SingleOrDefaultAsync(sh => sh.ShowtimeId == ticketDto.Showtime.Id && sh.Date == ticketDto.Date);
+                .SingleOrDefaultAsync(sh => sh.ShowtimeId == ticketDto.Showtime.Id && sh.Date == ticketDto.DateOfShowtime);
 
             var ticket = new TicketEntity
             {
@@ -53,7 +93,7 @@ namespace Cinema.Services
                 .Where(sha => sha.ShowtimeId == ticketDto.Showtime.Id)
                 .ToListAsync();
 
-            foreach (var additionDto in ticketDto.Additions)
+            foreach (var additionDto in ticketDto.TicketsAdditions)
             {
                 var showtimeAddition = showtimeAdditions
                     .SingleOrDefault(sha => sha.AdditionId == additionDto.Id);
@@ -90,7 +130,8 @@ namespace Cinema.Services
                     {
                         IsOrdered = isOrdered,
                         Ticket = ticket,
-                        Seat = seat
+                        Seat = seat,
+                        BlockingTime = DateTime.Now
                     }
                 );
             }
