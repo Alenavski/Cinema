@@ -80,7 +80,7 @@ namespace Cinema.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> ApplyTicket([FromBody] TicketDto ticketDto)
         {
-            await _ticketService.UpdateDateOfBookingAsync(ticketDto);
+            await _ticketService.ApplyTicketAsync(ticketDto);
 
             if (ticketDto.TicketsSeats == null)
             {

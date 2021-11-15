@@ -20,6 +20,18 @@ namespace Cinema.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<MovieDto>> GetMovies(DateTime date)
+        {
+            IQueryable<MovieEntity> movies = _context.Movies;
+
+            if (date != DateTime.MinValue)
+            {
+                movies = movies.Where(m => m.EndDate > date && date < m.StartDate);
+            }
+
+            return await movies.ProjectToType<MovieDto>().ToListAsync();
+        }
+
         public async Task<int> AddMovieAsync(MovieDto movie)
         {
             var movieEntity = movie.Adapt<MovieEntity>();

@@ -6,6 +6,7 @@ namespace Cinema.DB.Entities
     public class TicketEntity
     {
         public long Id { get; set; }
+        public bool IsOrdered { get; set; }
         public DateTime DateOfBooking { get; set; }
         public ShowtimeDateEntity ShowtimeDate { get; set; }
         public UserEntity User { get; set; }

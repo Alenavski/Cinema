@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 
@@ -11,5 +12,6 @@ namespace Cinema.Services.Interfaces
         Task<MovieDto> GetMovieByIdAsync(int id);
         Task DeleteMovieAsync(int id);
         Task UpdateMovieAsync(MovieDto movieDto);
+        Task<IEnumerable<MovieDto>> GetMovies(DateTime date);
     }
 }

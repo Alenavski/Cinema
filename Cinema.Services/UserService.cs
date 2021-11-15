@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -57,7 +58,7 @@ namespace Cinema.Services
             var salt = user.Salt;
             var hashedPassword = CreateHashedPassword(authDto.Password, salt);
 
-            if (user.Password.Equals(hashedPassword))
+            if (!user.Password.SequenceEqual(hashedPassword))
             {
                 return null;
             }

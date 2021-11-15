@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Cinema.Services.Dtos;
 using Cinema.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,13 @@ namespace Cinema.Api.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetMovies([FromQuery] DateTime date)
+        {
+            return Ok(await _movieService.GetMovies(date));
+        }
+
+
+        [HttpGet("with-showtimes")]
         public async Task<IActionResult> GetMoviesWithShowtimes([FromQuery] ShowtimeFilterDto showtimeFilterDto)
         {
             return Ok(await _movieService.GetMoviesByFilterAsync(showtimeFilterDto));

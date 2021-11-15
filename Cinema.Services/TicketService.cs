@@ -23,6 +23,7 @@ namespace Cinema.Services
         public async Task<IEnumerable<TicketDto>> GetTickets(int userId)
         {
             var tickets = await _context.Tickets
+                .Where(t => t.IsOrdered)
                 .Include(t => t.User)
                 .Include(t => t.ShowtimeDate)
                 .ThenInclude(shDate => shDate.Showtime)
@@ -42,6 +43,7 @@ namespace Cinema.Services
         public async Task<IEnumerable<TicketMovieDto>> GetTicketMovies(int userId)
         {
             var ticketMovies = await _context.Tickets
+                .Where(t => t.IsOrdered)
                 .Include(t => t.User)
                 .Include(t => t.ShowtimeDate)
                 .ThenInclude(sd => sd.Showtime)
@@ -70,18 +72,20 @@ namespace Cinema.Services
                 Id = 0,
                 ShowtimeDate = showtimeDate,
                 DateOfBooking = ticketDto.DateOfBooking,
-                User = user
+                User = user,
+                IsOrdered = false
             };
             await _context.Tickets.AddAsync(ticket);
             await _context.SaveChangesAsync();
             return ticket.Id;
         }
 
-        public async Task UpdateDateOfBookingAsync(TicketDto ticketDto)
+        public async Task ApplyTicketAsync(TicketDto ticketDto)
         {
             var ticket = await _context.Tickets
                 .SingleOrDefaultAsync(t => t.Id == ticketDto.Id);
             ticket.DateOfBooking = ticketDto.DateOfBooking;
+            ticket.IsOrdered = true;
             await _context.SaveChangesAsync();
         }
 

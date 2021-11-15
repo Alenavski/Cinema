@@ -9,7 +9,7 @@ namespace Cinema.Services.Interfaces
         Task<long> AddTicketAsync(int userId, TicketDto ticketDto);
         Task AddSeatForTicketAsync(long ticketId, long seatId, bool isOrdered);
         Task AddAdditionsForTicketAsync(TicketDto ticketDto);
-        Task UpdateDateOfBookingAsync(TicketDto ticketDto);
+        Task ApplyTicketAsync(TicketDto ticketDto);
         Task DeleteSeatTicketAsync(long seatId, long ticketId);
         Task<IEnumerable<TicketDto>> GetTickets(int userId);
         Task<IEnumerable<TicketMovieDto>> GetTicketMovies(int userId);

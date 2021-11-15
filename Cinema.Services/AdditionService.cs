@@ -41,12 +41,5 @@ namespace Cinema.Services
             await _context.SaveChangesAsync();
             return service.Id;
         }
-
-        public async Task DeleteAdditionAsync(int id)
-        {
-            var service = await _context.Additions.SingleOrDefaultAsync(s => s.Id == id);
-            _context.Additions.Remove(service);
-            await _context.SaveChangesAsync();
-        }
     }
 }
