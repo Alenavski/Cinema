@@ -26,7 +26,11 @@ namespace Cinema.Services
 
             if (date != DateTime.MinValue)
             {
-                movies = movies.Where(m => m.EndDate > date && date < m.StartDate);
+                movies = movies
+                    .Where(m =>
+                        DateTime.Compare(m.StartDate, date) <= 0
+                        && DateTime.Compare(m.EndDate, date) >= 0
+                    );
             }
 
             return await movies.ProjectToType<MovieDto>().ToListAsync();

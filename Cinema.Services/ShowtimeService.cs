@@ -22,7 +22,7 @@ namespace Cinema.Services
 
         public async Task<IEnumerable<CinemaDto>> GetCinemasByMovieIdAsync(int movieId)
         {
-            return await _context.Cinemas
+            var cinemas = await _context.Cinemas
                 .Include(c => c.Halls)
                 .ThenInclude(h => h.Showtimes.Where(sh => sh.MovieId == movieId))
                 .ThenInclude(sh => sh.Additions)
@@ -33,8 +33,8 @@ namespace Cinema.Services
                 .Include(c => c.Halls.Where(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
                 .ThenInclude(h => h.Seats)
                 .Where(c => c.Halls.Any(h => h.Showtimes.Any(sh => sh.MovieId == movieId)))
-                .ProjectToType<CinemaDto>()
                 .ToListAsync();
+            return cinemas.Adapt<CinemaDto[]>();
         }
 
         public async Task<bool> CanAddShowtimeAsync(int movieId, ShowtimeDto showtimeDto)

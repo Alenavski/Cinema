@@ -23,8 +23,6 @@ namespace Cinema.Services
         public async Task<IEnumerable<TicketDto>> GetTickets(int userId)
         {
             var tickets = await _context.Tickets
-                .Where(t => t.IsOrdered)
-                .Include(t => t.User)
                 .Include(t => t.ShowtimeDate)
                 .ThenInclude(shDate => shDate.Showtime)
                 .ThenInclude(sh => sh.Prices)
@@ -33,7 +31,7 @@ namespace Cinema.Services
                 .Include(t => t.TicketsSeats)
                 .ThenInclude(ts => ts.Seat)
                 .ThenInclude(seat => seat.SeatType)
-                .Where(t => t.User.Id == userId)
+                .Where(t => t.UserId == userId && t.IsOrdered)
                 .ProjectToType<TicketDto>()
                 .ToListAsync();
 
@@ -43,12 +41,10 @@ namespace Cinema.Services
         public async Task<IEnumerable<TicketMovieDto>> GetTicketMovies(int userId)
         {
             var ticketMovies = await _context.Tickets
-                .Where(t => t.IsOrdered)
-                .Include(t => t.User)
                 .Include(t => t.ShowtimeDate)
                 .ThenInclude(sd => sd.Showtime)
                 .ThenInclude(s => s.Movie)
-                .Where(t => t.User.Id == userId)
+                .Where(t => t.UserId == userId && t.IsOrdered)
                 .Select(t => new
                 {
                     Movie = t.ShowtimeDate.Showtime.Movie,
@@ -97,17 +93,18 @@ namespace Cinema.Services
                 .Where(sha => sha.ShowtimeId == ticketDto.Showtime.Id)
                 .ToListAsync();
 
-            foreach (var additionDto in ticketDto.TicketsAdditions)
+            foreach (var ticketAddition in ticketDto.TicketsAdditions)
             {
                 var showtimeAddition = showtimeAdditions
-                    .SingleOrDefault(sha => sha.AdditionId == additionDto.Id);
+                    .SingleOrDefault(sha => sha.AdditionId == ticketAddition.Addition.Id);
                 if (showtimeAddition != null)
                 {
                     await _context.TicketsAdditions.AddAsync(
                         new TicketAdditionEntity
                         {
-                            AdditionId = additionDto.Id,
-                            TicketId = ticket.Id
+                            AdditionId = ticketAddition.Addition.Id,
+                            TicketId = ticket.Id,
+                            Count = ticketAddition.Count
                         }
                     );
                 }

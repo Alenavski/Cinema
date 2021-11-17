@@ -9,6 +9,7 @@ namespace Cinema.DB.Entities
         public bool IsOrdered { get; set; }
         public DateTime DateOfBooking { get; set; }
         public ShowtimeDateEntity ShowtimeDate { get; set; }
+        public int UserId { get; set; }
         public UserEntity User { get; set; }
         public ICollection<TicketAdditionEntity> TicketsAdditions { get; set; }
         public ICollection<TicketSeatEntity> TicketsSeats { get; set; }
