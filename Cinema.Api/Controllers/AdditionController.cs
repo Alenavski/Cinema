@@ -23,26 +23,6 @@ namespace Cinema.Api.Controllers
             return Ok(await _additionService.GetAdditionsAsync());
         }
 
-        [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteAddition(int id)
-        {
-            var addition = await _additionService.GetAdditionByIdAsync(id);
-
-            if (addition == null)
-            {
-                return NotFound(
-                    new
-                    {
-                        message = "Such addition doesn't exist"
-                    }
-                );
-            }
-
-            await _additionService.DeleteAdditionAsync(id);
-            return Ok();
-        }
-
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAddition(AdditionDto additionDto)

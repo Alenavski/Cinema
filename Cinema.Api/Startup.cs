@@ -92,12 +92,6 @@ namespace Cinema.Api
                     dest => dest,
                     src => src.Addition
                 );
-            TypeAdapterConfig<TicketAdditionEntity, AdditionDto>
-                .NewConfig()
-                .Map(
-                    dest => dest,
-                    src => src.Addition
-                );
             TypeAdapterConfig<TicketEntity, TicketDto>
                 .NewConfig()
                 .Map(

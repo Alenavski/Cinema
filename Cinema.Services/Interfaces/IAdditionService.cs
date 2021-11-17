@@ -9,6 +9,5 @@ namespace Cinema.Services.Interfaces
         Task<IEnumerable<AdditionDto>> GetAdditionsAsync();
         Task<AdditionDto> GetAdditionByIdAsync(int id);
         Task<int> AddAdditionAsync(AdditionDto additionDto);
-        Task DeleteAdditionAsync(int id);
     }
 }
